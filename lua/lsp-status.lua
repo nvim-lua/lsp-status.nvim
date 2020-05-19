@@ -56,8 +56,8 @@ local function current_function_callback(_, _, result, _, _)
   local cursor_pos = vim.api.nvim_win_get_cursor(0)
   for _, sym in ipairs(function_symbols) do
     if
-      sym.range and
-      util.in_range(cursor_pos, sym.range)
+      (sym.range and util.in_range(cursor_pos, sym.range))
+      or (_config.select_symbol and _config.select_symbol(cursor_pos, sym.raw_item))
     then
       local fn_name = sym.text
       if _config.kind_labels[sym.kind] then

@@ -19,8 +19,10 @@ local function extract_symbols(items, _result)
       filename = item.location and vim.uri_to_fname(item.location.uri) or nil,
       range = sym_range,
       kind = kind,
-      text = item.name
+      text = item.name,
+      raw_item = item
     })
+
     if item.children then
       extract_symbols(item.children, result)
     end

@@ -143,7 +143,7 @@ local function get_messages()
 end
 
 local function configure(config)
-  _config = vim.tbl_extend('keep', _config, config, default_config)
+  _config = vim.tbl_extend('keep', config, _config, default_config)
   pyls_ms._init(messages, _config)
   clangd._init(messages, _config)
   progress._init(messages, _config)

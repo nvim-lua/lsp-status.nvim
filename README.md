@@ -57,17 +57,18 @@ the relevant LSP method name).
 
 ### Configuration
 
-You can configure `lsp-status.nvim` using the `config` function, which takes a table o
-configuration values. Right now, the only used configuration value is `kind_labels`, which should be
-a map from LSP symbol kinds to label symbols.
+You can configure `lsp-status.nvim` using the `config` function, which takes a table of
+configuration values. The following configuration options are supported:
 
-An additional configuration point is `select_symbol` which allows for adding an optional callback
-of the form `function(cursor_pos, document_symbol)` that should return `true` if the current
-DocumentSymbol should be accepted.
+- `kind_labels`: An optional map from LSP symbol kinds to label symbols. Used to decorate the current function
+  name. Default: `{}`
+- `select_symbol`: An optional callback of the form `function(cursor_pos, document_symbol)` that
+  should return `true` if `document_symbol` (a `DocumentSymbol`) should be accepted as the symbol
+  currently containing the cursor.
 
-For example, the sumneko lua server sends `valueRange` which is not specified in the protocol to
-give the range for a function's start and end. To respect `valueRange`, you can use this configuration.
-
+For example, the [sumneko lua server](https://github.com/sumneko/lua-language-server) sends
+`valueRange` (which is not specified in the protocol) to give the range for a function's start and
+end. To respect `valueRange`, you can use the following configuration:
 ```lua
 lsp_status.config {
   select_symbol = function(cursor_pos, symbol)

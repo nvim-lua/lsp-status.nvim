@@ -54,7 +54,8 @@ local function current_function_callback(_, _, result, _, _)
   end
 
   local cursor_pos = vim.api.nvim_win_get_cursor(0)
-  for _, sym in ipairs(function_symbols) do
+  for i = #function_symbols, 1, -1 do
+    local sym = function_symbols[i]
     if
       (sym.range and util.in_range(cursor_pos, sym.range))
       or (_config.select_symbol and _config.select_symbol(cursor_pos, sym.raw_item))

@@ -1,6 +1,7 @@
 local lsp_proto = require('vim.lsp.protocol')
 local function extract_symbols(items, _result)
   local result = _result or {}
+  if items == nil then return result end
   for _, item in ipairs(items) do
     local kind = lsp_proto.SymbolKind[item.kind] or 'Unknown'
     local sym_range = nil

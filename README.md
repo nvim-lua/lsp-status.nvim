@@ -2,6 +2,11 @@
 
 This is a Neovim plugin/library for generating statusline components from the built-in LSP client.
 
+## Notices
+- **2020/05/25**: There has been a minor breaking change to the API: `extension_callbacks` is now
+  named `extensions`. There have also been a number of additions and improvements; see the below
+  (specifically [Configuration](#configuration) and [Example Use](#example-use)) for details.
+
 ## Contents
 1. [Examples](#examples)
 2. [Installation](#installation)

@@ -3,7 +3,7 @@ local function init(_messages, _)
   messages = _messages
 end
 
-local M = {
+local callbacks =  {
   ['python/setStatusBarMessage'] = function(_, _, message, buffnr)
     table.insert(messages[buffnr].pyls_ms, { content = message[1] })
     vim.api.nvim_command('doautocmd User LspMessageUpdate')
@@ -34,7 +34,17 @@ local M = {
     messages[buffnr].pyls_ms.progress[1] = nil
     vim.api.nvim_command('doautocmd User LspMessageUpdate')
   end,
-  _init = init
 }
+
+local function setup()
+  return callbacks
+end
+
+local M = {
+  _init = init,
+  setup = setup
+}
+
+M = vim.tbl_extend('error', M, callbacks)
 
 return M

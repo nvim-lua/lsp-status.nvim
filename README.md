@@ -104,8 +104,7 @@ lsp_status.config {
 Here is an example configuration (also using [`nvim-lsp`](https://github.com/neovim/nvim-lsp/))
 showing how `lsp-status` can be integrated into one's statusline and other LSP configuration.
 
-### `nvim-lsp` config
-In any Lua file you load:
+**In any Lua file you load:**
 ```lua
 local lsp_status = require('lsp-status')
 -- completion_customize_lsp_label as used in completion-nvim
@@ -115,14 +114,14 @@ lsp_status.config { kind_labels = vim.g.completion_customize_lsp_label }
 lsp_status.register_progress()
 ```
 
-In an `on_attach` function for each relevant LSP client:
+**In an `on_attach` function for each relevant LSP client:**
 ```lua
 -- Register client for messages and set up buffer autocommands to update 
 -- the statusline and the current function
 lsp_status.on_attach(client)
 ```
 
-Specific client configuration (again, following `nvim-lsp` conventions):
+**Specific client configuration (following `nvim-lsp` conventions):**
 ```lua
 clangd = {
   callbacks = lsp_status.extensions.clangd.setup()

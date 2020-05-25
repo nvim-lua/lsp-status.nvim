@@ -23,6 +23,8 @@ local extension_callbacks = {
 -- Find current enclosing function
 local current_function = require('lsp-status/current_function')
 
+-- Out-of-the-box statusline component
+local statusline = require('lsp-status/statusline')
 
 local function configure(config)
   _config = vim.tbl_extend('keep', config, _config, default_config)
@@ -32,6 +34,28 @@ local function configure(config)
   current_function._init(messages, _config)
 end
 
+local function on_attach(client)
+  -- Register the client for messages
+  messaging.register_client(client.name)
+
+  -- Set up autocommands to refresh the statusline when information changes
+  vim.api.nvim_command('augroup lsp_aucmds')
+  vim.api.nvim_command('au! * <buffer>')
+  vim.api.nvim_command('au User LspDiagnosticsChanged redrawstatus!')
+  vim.api.nvim_command('au User LspMessageUpdate redrawstatus!')
+  vim.api.nvim_command('au User LspStatusUpdate redrawstatus!')
+  vim.api.nvim_command('augroup END')
+
+  -- If the client is a documentSymbolProvider, set up an autocommand
+  -- to update the containing symbol
+  if client.resolved_capabilities.document_symbol then
+    vim.api.nvim_command('augroup lsp_aucmds')
+    vim.api.nvim_command(
+      'au CursorHold <buffer> lua require("lsp-status").update_current_function()'
+    )
+    vim.api.nvim_command('augroup END')
+  end
+end
 
 configure(_config)
 
@@ -43,6 +67,8 @@ local M = {
   register_client = messaging.register_client,
   extensions = extension_callbacks,
   config = configure,
+  on_attach = on_attach,
+  status = statusline,
 }
 
 return M

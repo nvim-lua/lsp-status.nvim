@@ -36,7 +36,7 @@ end
 
 local function on_attach(client)
   -- Register the client for messages
-  messaging.register_client(client.name)
+  messaging.register_client(client.id, client.name)
 
   -- Set up autocommands to refresh the statusline when information changes
   vim.api.nvim_command('augroup lsp_aucmds')
@@ -69,6 +69,7 @@ local M = {
   config = configure,
   on_attach = on_attach,
   status = statusline,
+  capabilities = messaging.capabilities
 }
 
 return M

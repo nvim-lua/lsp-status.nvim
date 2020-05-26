@@ -1,16 +1,19 @@
+local util = require('lsp-status/util')
+
 local messages = {}
 
 local function init(_messages, _)
   messages = _messages
 end
 
+local function ensure_init(id)
+  util.ensure_init(messages, id, 'clangd')
+end
+
 local callbacks = {
-  ['textDocument/clangd.fileStatus'] = function(_, _, statusMessage, _, buffnr)
-    table.insert(messages[buffnr].clangd, {
-      uri = statusMessage.uri,
-      content = statusMessage.state,
-      show_once = true
-    })
+  ['textDocument/clangd.fileStatus'] = function(_, _, statusMessage, client_id)
+    ensure_init(client_id)
+    messages[client_id].status = { uri = statusMessage.uri, content = statusMessage.state }
     vim.api.nvim_command('doautocmd User LspMessageUpdate')
   end,
 }

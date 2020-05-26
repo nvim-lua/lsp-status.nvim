@@ -48,8 +48,9 @@ local function statusline_lsp()
   for _, msg in ipairs(buf_messages) do
     local name = aliases[msg.name] or msg.name
     local client_name = '[' .. name .. ']'
+    local contents = ''
     if msg.progress then
-      local contents = msg.title
+      contents = msg.title
       if msg.message then
         contents = contents .. ' ' .. msg.message
       end
@@ -61,11 +62,23 @@ local function statusline_lsp()
       if msg.spinner then
         contents = vim.g.spinner_frames[(msg.spinner % #vim.g.spinner_frames) + 1] .. ' ' .. contents
       end
+    elseif msg.status then
+      contents = msg.content
+      if msg.uri then
+        local filename = vim.uri_to_fname(msg.uri)
+        filename = vim.fn.fnamemodify(filename, ':~:.')
+        local space = math.min(60, math.floor(0.6 * vim.fn.winwidth(0)))
+        if #filename > space then
+          filename = vim.fn.pathshorten(filename)
+        end
 
-      table.insert(msgs, client_name .. ' ' .. contents)
+        contents = '(' .. filename .. ') ' .. contents
+      end
     else
-      table.insert(msgs, client_name .. ' ' .. msg.content)
+      contents = msg.content
     end
+
+    table.insert(msgs, client_name .. ' ' .. contents)
   end
 
   local base_status = vim.trim(table.concat(status_parts, ' ') .. ' ' .. table.concat(msgs, ' '))

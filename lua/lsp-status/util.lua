@@ -57,10 +57,17 @@ local function filter(list, test)
   return result
 end
 
+local function ensure_init(messages, id, name)
+  if not messages[id] then
+    messages[id] = { name = name, messages = {}, progress = {}, status = {} }
+  end
+end
+
 local M = {
   extract_symbols = extract_symbols,
   in_range = in_range,
-  filter = filter
+  filter = filter,
+  ensure_init = ensure_init
 }
 
 return M

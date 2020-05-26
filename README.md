@@ -40,7 +40,7 @@ call packager#add('wbthomason/lsp-status.nvim')
 
 ## Usage
 
-The plugin provides several functions which you can call:
+The plugin provides several utilities:
 ```lua
 update_current_function() -- Set/reset the b:lsp_current_function variable
 diagnostics() -- Return a table with all diagnostic counts for the current buffer
@@ -55,6 +55,8 @@ extensions = { clangd, pyls_ms }
 -- buffer autocommands
 on_attach(client) 
 config(config_vals) -- Configure lsp-status
+-- Table of client capabilities extended to signal support for progress messages
+capabilities 
 status() -- One example out-of-the-box statusline component (as shown in the images above)
 ```
 ### Protocol Extensions
@@ -65,6 +67,8 @@ server](https://github.com/Microsoft/python-language-server) (`python/setStatusB
 `python/beginProgress`, `python/reportProgress`, and `python/endProgress`). To use these extensions,
 register the callbacks provided in the `extensions` table (the keys for the callbacks are
 the relevant LSP method name).
+
+**Note:** For `clangd`, you must also set `init_options = { clangdFileStatus = true }`.
 
 **New**: You can also call `lsp_status.extensions.<server name>.setup()` to return the full set of
 callbacks, as shown below.
@@ -117,6 +121,12 @@ lsp_status.config { kind_labels = vim.g.completion_customize_lsp_label }
 
 -- Register the progress callback
 lsp_status.register_progress()
+```
+
+**Before calling `setup` for each relevant LSP client:**
+```lua
+-- Set default client capabilities plus window/workDoneProgress
+config.capabilities = vim.tbl_extend('keep', config.capabilities or {}, lsp_status.capabilities)
 ```
 
 **In an `on_attach` function for each relevant LSP client:**

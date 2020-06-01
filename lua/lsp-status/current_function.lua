@@ -29,7 +29,7 @@ local function current_function_callback(_, _, result, _, _)
       or (_config.select_symbol and _config.select_symbol(cursor_pos, sym.raw_item))
     then
       local fn_name = sym.text
-      if _config.kind_labels[sym.kind] then
+      if _config.kind_labels and _config.kind_labels[sym.kind] then
         fn_name = _config.kind_labels[sym.kind] .. ' ' .. fn_name
       end
 

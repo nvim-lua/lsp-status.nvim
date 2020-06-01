@@ -1,9 +1,8 @@
-vim.g.indicator_errors = ''
-vim.g.indicator_warnings = ''
-vim.g.indicator_info = '🛈'
-vim.g.indicator_hint = '❗'
-vim.g.indicator_ok = ''
-vim.g.spinner_frames = { '⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷' }
+local config = {}
+
+local function init(_, _config)
+  config = vim.tbl_extend('force', config, _config)
+end
 
 local diagnostics = require('lsp-status/diagnostics')
 local messages = require('lsp-status/messaging').messages
@@ -22,25 +21,25 @@ local function statusline_lsp()
   local some_diagnostics = false
   local status_parts = {}
   if buf_diagnostics.errors and buf_diagnostics.errors > 0 then
-    table.insert(status_parts, vim.g.indicator_errors .. ' ' .. buf_diagnostics.errors)
+    table.insert(status_parts, config.indicator_errors .. ' ' .. buf_diagnostics.errors)
     only_hint = false
     some_diagnostics = true
   end
 
   if buf_diagnostics.warnings and buf_diagnostics.warnings > 0 then
-    table.insert(status_parts, vim.g.indicator_warnings .. ' ' .. buf_diagnostics.warnings)
+    table.insert(status_parts, config.indicator_warnings .. ' ' .. buf_diagnostics.warnings)
     only_hint = false
     some_diagnostics = true
   end
 
   if buf_diagnostics.info and buf_diagnostics.info > 0 then
-    table.insert(status_parts, vim.g.indicator_info .. ' ' .. buf_diagnostics.info)
+    table.insert(status_parts, config.indicator_info .. ' ' .. buf_diagnostics.info)
     only_hint = false
     some_diagnostics = true
   end
 
   if buf_diagnostics.hints and buf_diagnostics.hints > 0 then
-    table.insert(status_parts, vim.g.indicator_hint .. ' ' .. buf_diagnostics.hints)
+    table.insert(status_parts, config.indicator_hint .. ' ' .. buf_diagnostics.hints)
     some_diagnostics = true
   end
 
@@ -60,7 +59,7 @@ local function statusline_lsp()
       end
 
       if msg.spinner then
-        contents = vim.g.spinner_frames[(msg.spinner % #vim.g.spinner_frames) + 1] .. ' ' .. contents
+        contents = config.spinner_frames[(msg.spinner % #config.spinner_frames) + 1] .. ' ' .. contents
       end
     elseif msg.status then
       contents = msg.content
@@ -82,7 +81,7 @@ local function statusline_lsp()
   end
 
   local base_status = vim.trim(table.concat(status_parts, ' ') .. ' ' .. table.concat(msgs, ' '))
-  local symbol = ' 🇻' .. ((some_diagnostics and only_hint) and '' or ' ')
+  local symbol = config.status_symbol .. ((some_diagnostics and only_hint) and '' or ' ')
   local current_function = vim.b.lsp_current_function
   if current_function and current_function ~= '' then
     symbol = symbol .. '(' .. current_function .. ') '
@@ -92,7 +91,12 @@ local function statusline_lsp()
     return symbol .. base_status .. ' '
   end
 
-  return symbol .. vim.g.indicator_ok .. ' '
+  return symbol .. config.indicator_ok .. ' '
 end
 
-return statusline_lsp
+local M = {
+  _init = init,
+  status = statusline_lsp
+}
+
+return M

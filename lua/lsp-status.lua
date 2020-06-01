@@ -1,12 +1,26 @@
 local _config = {}
 local default_config = {
-  kind_labels = {}
+  kind_labels = {},
+  indicator_errors = '',
+  indicator_warnings = '',
+  indicator_info = '🛈',
+  indicator_hint = '❗',
+  indicator_ok = '',
+  spinner_frames = { '⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷' },
+  status_symbol = ' 🇻',
+  select_symbol = nil
 }
 
 _config = vim.deepcopy(default_config)
 local messages = {}
 
 -- Diagnostics
+--- Get all diagnostics for the current buffer.
+--- Convenience function to retrieve all diagnostic counts for the current buffer.
+--@returns `{ 'Error': error_count, 'Warning': warning_count', 'Info': info_count, 'Hint': hint_count `}
+local function diagnostics() -- luacheck: no unused
+  error() -- Stub for docs
+end
 local diagnostics = require('lsp-status/diagnostics')
 
 -- Messaging
@@ -68,7 +82,7 @@ local M = {
   extensions = extension_callbacks,
   config = configure,
   on_attach = on_attach,
-  status = statusline,
+  status = statusline.status,
   capabilities = messaging.capabilities
 }
 

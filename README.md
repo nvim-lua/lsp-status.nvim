@@ -168,7 +168,7 @@ lua << END
 local lsp_status = require('lsp-status')
 lsp_status.register_progress()
 
-local nvim_lsp = require('nvim-lsp')
+local nvim_lsp = require('nvim_lsp')
 
 -- Some arbitrary servers
 nvim_lsp.clangd.setup({

@@ -118,7 +118,9 @@ showing how `lsp-status` can be integrated into one's statusline and other LSP c
 ```lua
 local lsp_status = require('lsp-status')
 -- completion_customize_lsp_label as used in completion-nvim
--- Optional: customize the kind labels used in identifying the current function
+-- Optional: customize the kind labels used in identifying the current function.
+-- g:completion_customize_lsp_label is a dict mapping from LSP symbol kind 
+-- to the string you want to display as a label
 -- lsp_status.config { kind_labels = vim.g.completion_customize_lsp_label }
 
 -- Register the progress callback
@@ -134,7 +136,8 @@ config.capabilities = vim.tbl_extend('keep', config.capabilities or {}, lsp_stat
 **In an `on_attach` function for each relevant LSP client:**
 ```lua
 -- Register client for messages and set up buffer autocommands to update 
--- the statusline and the current function
+-- the statusline and the current function.
+-- NOTE: on_attach is called with the client object, which is the "client" parameter below
 lsp_status.on_attach(client)
 ```
 
@@ -173,17 +176,25 @@ nvim_lsp.clangd.setup({
   init_options = {
     clangdFileStatus = true
   },
-  on_attach = lsp_status.on_attach
+  on_attach = lsp_status.on_attach,
+  capabilities = lsp_status.capabilities
 })
 
 nvim_lsp.pyls_ms.setup({
   callbacks = lsp_status.extensions.pyls_ms.setup(),
   settings = { python = { workspaceSymbols = { enabled = true }}},
-  on_attach = lsp_status.on_attach
+  on_attach = lsp_status.on_attach,
+  capabilities = lsp_status.capabilities
 })
 
-nvim_lsp.ghcide.setup({ on_attach = lsp_status.on_attach })
-nvim_lsp.rust_analyzer.setup({ on_attach = lsp_status.on_attach })
+nvim_lsp.ghcide.setup({
+  on_attach = lsp_status.on_attach,
+  capabilities = lsp_status.capabilities
+})
+nvim_lsp.rust_analyzer.setup({
+  on_attach = lsp_status.on_attach,
+  capabilities = lsp_status.capabilities
+})
 END
 
 " Statusline

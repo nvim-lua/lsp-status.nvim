@@ -2,10 +2,12 @@ local util = require('lsp-status/util')
 
 local messages = {}
 
+---@private
 local function init(_messages, _)
   messages = _messages
 end
 
+---@private
 local function ensure_init(id)
   util.ensure_init(messages, id, 'clangd')
 end
@@ -18,6 +20,8 @@ local callbacks = {
   end,
 }
 
+--- Return the callback {LSP Method: callback} table for `clangd`'s `fileStatus` extension
+--@returns Table of extension method callbacks, to be added to your `clangd` config
 local function setup()
   return callbacks
 end

@@ -1,10 +1,12 @@
 local util = require('lsp-status/util')
 
 local messages = {}
+---@private
 local function init(_messages, _)
   messages = _messages
 end
 
+---@private
 local function ensure_init(id)
   util.ensure_init(messages, id, 'pyls_ms')
 end
@@ -32,6 +34,9 @@ local callbacks =  {
   end,
 }
 
+--- Return the callback {LSP Method: callback} table for `MPLS`'s progress and statusbar message
+--- extensions
+--@returns Table of extension method callbacks, to be added to your `pyls_ms` config
 local function setup()
   return callbacks
 end

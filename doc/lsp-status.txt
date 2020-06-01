@@ -1,0 +1,208 @@
+*lsp-status.txt*        Extract PDF information and annotations to plain-text notes
+*lsp-status.nvim*
+*lsp-status.nvim*
+
+Author: Wil Thomason <wil.thomason@gmail.com>
+
+CONTENTS                                        *lsp-status-contents*
+Introduction                                    |lsp-status-introduction|
+  Requirements                                  |lsp-status-intro-requirements|
+  Features                                      |lsp-status-intro-features|
+Usage                                           |lsp-status-usage|
+API                                             |lsp-status-api|
+==============================================================================
+INTRODUCTION                                    *lsp-status-introduction*
+
+This is a Neovim plugin/library for generating statusline components from the
+built-in LSP client.
+
+==============================================================================
+REQUIREMENTS                                     *lsp-status-intro-requirements*
+
+You need to be running a version of Neovim recent enough to have the native
+LSP client included. It's also recommended to use
+https://github.com/neovim/nvim-lsp.
+
+==============================================================================
+FEATURES                                         *lsp-status-intro-features*
+
+- Handle `$/progress` LSP messages
+- Convenience function for getting all LSP diagnostics in a single call
+- Track current enclosing function symbol
+- Handle the message and file status protocol extensions from `pyls_ms` and
+  `clangd`
+- An out of the box statusline component displaying all this information
+
+==============================================================================
+USAGE                                            *lsp-status-usage*
+
+See the below API documentation in |lsp-status-api|. For a complete setup
+example:>
+  lua << END
+  local lsp_status = require('lsp-status')
+  lsp_status.register_progress()
+
+  local nvim_lsp = require('nvim-lsp')
+
+  -- Some arbitrary servers
+  nvim_lsp.clangd.setup({
+    callbacks = lsp_status.extensions.clangd.setup(),
+    init_options = {
+      clangdFileStatus = true
+    },
+    on_attach = lsp_status.on_attach,
+    capabilities = lsp_status.capabilities
+  })
+
+  nvim_lsp.pyls_ms.setup({
+    callbacks = lsp_status.extensions.pyls_ms.setup(),
+    settings = { python = { workspaceSymbols = { enabled = true }}},
+    on_attach = lsp_status.on_attach,
+    capabilities = lsp_status.capabilities
+  })
+
+  nvim_lsp.ghcide.setup({
+    on_attach = lsp_status.on_attach,
+    capabilities = lsp_status.capabilities
+  })
+  nvim_lsp.rust_analyzer.setup({
+    on_attach = lsp_status.on_attach,
+    capabilities = lsp_status.capabilities
+  })
+  END
+
+  " Statusline
+  function! LspStatus() abort
+    if luaeval('#vim.lsp.buf_get_clients() > 0')
+      return luaeval("require('lsp-status').status()")
+    endif
+
+    return ''
+  endfunction
+
+==============================================================================
+API: core module lsp-status                                   *lsp-status-api*
+
+capabilities()                                     *lsp-status.capabilities()*
+                Table of client capabilities including progress message
+                capability. Assign or extend your server's capabilities table
+                with this
+
+configure({config})                                   *lsp-status.configure()*
+                Configure lsp-status.nvim. Currently supported configuration
+                variables are:
+                • `kind_labels` : A map from LSP symbol kinds to label
+                  symbols. Used to decorate the current function name.
+                  Default: `{}`• 
+                • `select_symbol` : A callback of the form
+                  `function(cursor_pos, document_symbol)` that should return
+                  `true` if `document_symbol` (a `DocumentSymbol` ) should be
+                  accepted as the symbol currently containing the cursor.• 
+                • `indicator_errors` : Symbol to place next to the error count
+                  in `status` . Default: '',• 
+                • `indicator_warnings` : Symbol to place next to the warning
+                  count in `status` . Default: '',• 
+                • `indicator_info` : Symbol to place next to the info count in
+                  `status` . Default: '🛈',• 
+                • `indicator_hint` : Symbol to place next to the hint count in
+                  `status` . Default: '❗',• 
+                • `indicator_ok` : Symbol to show in `status` if there are no
+                  diagnostics. Default: '',• 
+                • `spinner_frames` : Animation frames for progress spinner in
+                  `status` . Default: { '⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷'
+                  },• 
+                • `status_symbol` : Symbol to start the statusline segment in
+                  `status` . Default: ' 🇻',•
+
+                Parameters: ~
+                    {config}(required, table) Table of values; keys are as
+                              listed above. Accept defaults by omitting the
+                              relevant key.
+
+diagnostics()                                       *lsp-status.diagnostics()*
+                Get all diagnostics for the current buffer. Convenience
+                function to retrieve all diagnostic counts for the current
+                buffer.
+
+                Return: ~
+                    { 'Error: error_count, 'Warning': warning_count', 'Info':
+                  info_count, 'Hint': hint_count `}
+
+messages()                                             *lsp-status.messages()*
+                Return the current set of messages from all servers. Messages
+                are either progress messages, file status messages, or
+                "normal" messages. Progress messages are tables of the form `{
+                name = Server name, title = Progress item title, message =
+                Current progress message (if any), percentage = Current
+                progress percentage (if any), progress = true, spinner =
+                Spinner frames index, }`
+
+                File status messages are tables of the form `{ name = Server
+                name, content = Message content, uri = File URI, status = true
+                }` Normal messages are tables of the form `{ name = Server
+                name, content = Message contents }`
+
+                Return: ~
+                    list of messages
+
+on_attach({client})                                   *lsp-status.on_attach()*
+                Register a new server for messages. Use this function either
+                as your server's `on_attach` or inside your server's
+                `on_attach` . It registers the server with `lsp-status` for
+                progress message handling and current function updating
+
+                Parameters: ~
+                    {client}(required, vim.lsp.client)
+
+register_client({id}, {name})                   *lsp-status.register_client()*
+                Register a new server to receive messages. Generally, you
+                don't need to call this manually - `on_attach` sets it up for
+                you
+
+                Parameters: ~
+                    {id}  (required, number) Client ID
+                    {name}(required, string) Client name
+
+register_progress()                           *lsp-status.register_progress()*
+                Register the progress callback with Neovim's LSP client. Call
+                once before starting any servers
+
+status()                                                 *lsp-status.status()*
+                Out-of-the-box statusline component. Returns a statusline
+                component with (1) a leading glyph, (2) the current function
+                information, and (3) diagnostic information. Call in your
+                statusline definition. Usable out of the box, but intended
+                more as an example/template for modification to customize to
+                your own needs
+
+                Return: ~
+                    : statusline component string
+
+update_current_function()               *lsp-status.update_current_function()*
+                Update the current function symbol. Generally, you don't need
+                to call this manually - |lsp-status.on_attach| sets up its use
+                for you. Sets the `b:lsp_current_function` variable.
+
+
+==============================================================================
+Module: lsp-status.clangd                              *lsp-status-api-clangd*
+
+setup()                                 *lsp-status.extensions.clangd.setup()*
+                Return the callback {LSP Method: callback} table for `clangd` 's `fileStatus` extension
+
+                Return: ~
+                    Table of extension method callbacks, to be added to your
+                  `clangd` config
+
+
+==============================================================================
+Module: lsp-status.pyls_ms                            *lsp-status-api-pyls_ms*
+
+setup()                                *lsp-status.extensions.pyls_ms.setup()*
+                Return the callback {LSP Method: callback} table for `MPLS` 's progress and statusbar message extensions
+
+                Return: ~
+                    Table of extension method callbacks, to be added to your
+                  `pyls_ms` config
+
+ vim:tw=78:ts=2:ft=help:norl:

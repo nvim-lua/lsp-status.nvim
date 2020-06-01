@@ -1,5 +1,6 @@
 local util = require('lsp-status/util')
 
+local clients = {}
 local messages = {}
 local function init(_messages, _)
   messages = _messages
@@ -21,9 +22,17 @@ local function progress_callback(_, _, msg, client_id)
       messages[client_id].progress[msg.token].percentage = val.percentage
       messages[client_id].progress[msg.token].spinner = messages[client_id].progress[msg.token].spinner + 1
     elseif val.kind == 'end' then
-      messages[client_id].progress[msg.token].message = val.message
-      messages[client_id].progress[msg.token].done = true
-      messages[client_id].progress[msg.token].spinner = nil
+      if messages[client_id].progress[msg.token] == nil then
+        vim.api.nvim_command('echohl WarningMsg')
+        vim.api.nvim_command(
+          'echom "[lsp-status] Received `end` message with no corresponding `begin` from  ' .. clients[client_id] .. '!"'
+        )
+        vim.api.nvim_command('echohl None')
+      else
+        messages[client_id].progress[msg.token].message = val.message
+        messages[client_id].progress[msg.token].done = true
+        messages[client_id].progress[msg.token].spinner = nil
+      end
     end
   else
     table.insert(messages[client_id], { content = val, show_once = true, shown = 0 })
@@ -92,6 +101,7 @@ end
 -- Client registration for messages
 local function register_client(id, name)
   util.ensure_init(messages, id, name)
+  clients[id] = name
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()

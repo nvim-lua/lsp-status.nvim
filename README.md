@@ -14,6 +14,7 @@ This is a Neovim plugin/library for generating statusline components from the bu
     1. [Protocol Extensions](#protocol-extensions)
     2. [Configuration](#configuration)
 4. [Example Use](#example-use)
+    1. [All together, now](#all-together-now)
 5. [Status](#status)
 6. [Contributing](#contributing)
 
@@ -117,7 +118,8 @@ showing how `lsp-status` can be integrated into one's statusline and other LSP c
 ```lua
 local lsp_status = require('lsp-status')
 -- completion_customize_lsp_label as used in completion-nvim
-lsp_status.config { kind_labels = vim.g.completion_customize_lsp_label }
+-- Optional: customize the kind labels used in identifying the current function
+-- lsp_status.config { kind_labels = vim.g.completion_customize_lsp_label }
 
 -- Register the progress callback
 lsp_status.register_progress()
@@ -153,6 +155,47 @@ An example statusline segment is provided in
 and develop your own statusline segment, but if you'd like something reasonable out-of-the-box, you
 can call `lsp_status.status()` somewhere in your statusline definition (make sure you have
 `require`'d the `lsp-status` module too!)
+
+### All together, now
+
+Here's a complete example:
+
+```vim
+lua << END
+local lsp_status = require('lsp-status')
+lsp_status.register_progress()
+
+local nvim_lsp = require('nvim-lsp')
+
+-- Some arbitrary servers
+nvim_lsp.clangd.setup({
+  callbacks = lsp_status.extensions.clangd.setup(),
+  init_options = {
+    clangdFileStatus = true
+  },
+  on_attach = lsp_status.on_attach
+})
+
+nvim_lsp.pyls_ms.setup({
+  callbacks = lsp_status.extensions.pyls_ms.setup(),
+  settings = { python = { workspaceSymbols = { enabled = true }}},
+  on_attach = lsp_status.on_attach
+})
+
+nvim_lsp.ghcide.setup({ on_attach = lsp_status.on_attach })
+nvim_lsp.rust_analyzer.setup({ on_attach = lsp_status.on_attach })
+END
+
+" Statusline
+function! LspStatus() abort
+  if luaeval('#vim.lsp.buf_get_clients() > 0')
+    return luaeval("require('lsp-status').status()")
+  endif
+
+  return ''
+endfunction
+
+```
 
 ## Status
 

@@ -88,7 +88,7 @@ capabilities()                                     *lsp-status.capabilities()*
                 capability. Assign or extend your server's capabilities table
                 with this
 
-configure({config})                                   *lsp-status.configure()*
+config({config})                                   *lsp-status.config()*
                 Configure lsp-status.nvim. Currently supported configuration
                 variables are:
                 • `kind_labels` : A map from LSP symbol kinds to label

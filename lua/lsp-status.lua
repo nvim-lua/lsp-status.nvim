@@ -57,8 +57,8 @@ local statusline = require('lsp-status/statusline')
 ---
 --@param config: (required, table) Table of values; keys are as listed above. Accept defaults by
 --- omitting the relevant key.
-local function configure(config)
-  _config = vim.tbl_extend('keep', config, _config, default_config)
+local function config(user_config)
+  _config = vim.tbl_extend('keep', user_config, _config, default_config)
   pyls_ms._init(messages, _config)
   clangd._init(messages, _config)
   messaging._init(messages, _config)
@@ -95,7 +95,7 @@ local function on_attach(client)
   end
 end
 
-configure(_config)
+config(_config)
 
 -- Stubs for documentation
 --- Update the current function symbol.
@@ -171,7 +171,7 @@ local M = {
   register_progress = messaging.register_progress,
   register_client = messaging.register_client,
   extensions = extension_callbacks,
-  config = configure,
+  config = config,
   on_attach = on_attach,
   status = statusline.status,
   capabilities = messaging.capabilities

@@ -36,7 +36,7 @@ You will need a version of Neovim that includes the built-in LSP client (right n
 nightly). Use your preferred package/plugin manager. With
 [`vim-packager`](https://github.com/kristijanhusak/vim-packager), this looks like:
 ```vim
-call packager#add('wbthomason/lsp-status.nvim')
+call packager#add('nvim-lua/lsp-status.nvim')
 ```
 
 ## Usage

@@ -1,6 +1,5 @@
 *lsp-status.txt*        Extract PDF information and annotations to plain-text notes
 *lsp-status.nvim*
-*lsp-status.nvim*
 
 Author: Wil Thomason <wil.thomason@gmail.com>
 

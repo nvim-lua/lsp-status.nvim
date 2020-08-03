@@ -1,6 +1,5 @@
 *lsp-status.txt*        Collect and display language server status information
 *lsp-status.nvim*
-*lsp-status.nvim*
 
 Author: Wil Thomason <wil.thomason@gmail.com>
 

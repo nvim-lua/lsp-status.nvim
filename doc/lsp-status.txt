@@ -1,4 +1,4 @@
-*lsp-status.txt*        Extract PDF information and annotations to plain-text notes
+*lsp-status.txt*        Collect and display language server status information
 *lsp-status.nvim*
 *lsp-status.nvim*
 

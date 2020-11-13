@@ -9,7 +9,7 @@ local function get_all_diagnostics()
   }
 
   for k, level in pairs(levels) do
-    result[k] = vim.lsp.util.buf_diagnostics_count(level)
+    result[k] = vim.lsp.diagnostic.get_count(level)
   end
 
   return result

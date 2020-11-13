@@ -3,6 +3,9 @@
 This is a Neovim plugin/library for generating statusline components from the built-in LSP client.
 
 ## Notices
+- **2020/11/13**: Due to [this PR](https://github.com/neovim/neovim/pull/12655), you must update to
+  the latest Neovim `master` to avoid errors with the old diagnostics API. See [issue
+  #19](https://github.com/nvim-lua/lsp-status.nvim/issues/19) for more information.
 - **2020/05/25**: There has been a minor breaking change to the API: `extension_callbacks` is now
   named `extensions`. There have also been a number of additions and improvements; see the below
   (specifically [Configuration](#configuration) and [Example Use](#example-use)) for details.

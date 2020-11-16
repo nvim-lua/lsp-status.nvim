@@ -11,7 +11,7 @@ local function ensure_init(id)
   util.ensure_init(messages, id, 'pyls_ms')
 end
 
-local callbacks =  {
+local handlers =  {
   ['python/setStatusBarMessage'] = function(_, _, message, client_id)
     ensure_init(client_id)
     messages[client_id].static_message = { content = message[1] }
@@ -34,11 +34,11 @@ local callbacks =  {
   end,
 }
 
---- Return the callback {LSP Method: callback} table for `MPLS`'s progress and statusbar message
+--- Return the handler {LSP Method: handler} table for `MPLS`'s progress and statusbar message
 --- extensions
---@returns Table of extension method callbacks, to be added to your `pyls_ms` config
+--@returns Table of extension method handlers, to be added to your `pyls_ms` config
 local function setup()
-  return callbacks
+  return handlers
 end
 
 local M = {
@@ -46,6 +46,6 @@ local M = {
   setup = setup
 }
 
-M = vim.tbl_extend('error', M, callbacks)
+M = vim.tbl_extend('error', M, handlers)
 
 return M

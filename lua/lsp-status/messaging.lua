@@ -95,7 +95,7 @@ local function get_messages()
   return new_messages
 end
 
-local function register_progress() vim.lsp.callbacks['$/progress'] = progress_callback end
+local function register_progress() vim.lsp.handlers['$/progress'] = progress_callback end
 
 -- Client registration for messages
 local function register_client(id, name)

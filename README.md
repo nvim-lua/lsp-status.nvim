@@ -49,11 +49,11 @@ The plugin provides several utilities:
 update_current_function() -- Set/reset the b:lsp_current_function variable
 diagnostics() -- Return a table with all diagnostic counts for the current buffer
 messages() -- Return a table listing progress and other status messages for display
-register_progress() -- Register the provided callback for progress messages
+register_progress() -- Register the provided handler for progress messages
 register_client() -- Register a client for messages
 -- Integrate misc. LS protocol extensions into the messages framework
--- Each extension table contains a set of callbacks and a setup() function 
--- returning said callbacks
+-- Each extension table contains a set of handlers and a setup() function 
+-- returning said handlers
 extensions = { clangd, pyls_ms }
 -- Set up a client for use with lsp-status. Calls register_client() and sets up 
 -- buffer autocommands
@@ -69,13 +69,13 @@ status() -- One example out-of-the-box statusline component (as shown in the ima
 [`clangd`](https://clangd.llvm.org/extensions.html#file-status) and [Microsoft's Python language
 server](https://github.com/Microsoft/python-language-server) (`python/setStatusBarMessage`,
 `python/beginProgress`, `python/reportProgress`, and `python/endProgress`). To use these extensions,
-register the callbacks provided in the `extensions` table (the keys for the callbacks are
+register the handlers provided in the `extensions` table (the keys for the handlers are
 the relevant LSP method name).
 
 **Note:** For `clangd`, you must also set `init_options = { clangdFileStatus = true }`.
 
 **New**: You can also call `lsp_status.extensions.<server name>.setup()` to return the full set of
-callbacks, as shown below.
+handlers, as shown below.
 
 ### Configuration
 
@@ -84,7 +84,7 @@ configuration values. The following configuration options are supported:
 
 - `kind_labels`: An optional map from LSP symbol kinds to label symbols. Used to decorate the current function
   name. Default: `{}`
-- `select_symbol`: An optional callback of the form `function(cursor_pos, document_symbol)` that
+- `select_symbol`: An optional handler of the form `function(cursor_pos, document_symbol)` that
   should return `true` if `document_symbol` (a `DocumentSymbol`) should be accepted as the symbol
   currently containing the cursor.
 
@@ -126,7 +126,7 @@ local lsp_status = require('lsp-status')
 -- to the string you want to display as a label
 -- lsp_status.config { kind_labels = vim.g.completion_customize_lsp_label }
 
--- Register the progress callback
+-- Register the progress handler
 lsp_status.register_progress()
 ```
 
@@ -147,10 +147,10 @@ lsp_status.on_attach(client)
 **Specific client configuration (following `nvim-lsp` conventions):**
 ```lua
 clangd = {
-  callbacks = lsp_status.extensions.clangd.setup()
+  handlers = lsp_status.extensions.clangd.setup()
 },
 pyls_ms = {
-  callbacks = lsp_status.extensions.pyls_ms.setup()
+  handlers = lsp_status.extensions.pyls_ms.setup()
 },
 ```
 
@@ -175,7 +175,7 @@ local nvim_lsp = require('nvim_lsp')
 
 -- Some arbitrary servers
 nvim_lsp.clangd.setup({
-  callbacks = lsp_status.extensions.clangd.setup(),
+  handlers = lsp_status.extensions.clangd.setup(),
   init_options = {
     clangdFileStatus = true
   },
@@ -184,7 +184,7 @@ nvim_lsp.clangd.setup({
 })
 
 nvim_lsp.pyls_ms.setup({
-  callbacks = lsp_status.extensions.pyls_ms.setup(),
+  handlers = lsp_status.extensions.pyls_ms.setup(),
   settings = { python = { workspaceSymbols = { enabled = true }}},
   on_attach = lsp_status.on_attach,
   capabilities = lsp_status.capabilities

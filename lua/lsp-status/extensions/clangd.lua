@@ -12,7 +12,7 @@ local function ensure_init(id)
   util.ensure_init(messages, id, 'clangd')
 end
 
-local callbacks = {
+local handlers = {
   ['textDocument/clangd.fileStatus'] = function(_, _, statusMessage, client_id)
     ensure_init(client_id)
     messages[client_id].status = { uri = statusMessage.uri, content = statusMessage.state }
@@ -20,10 +20,10 @@ local callbacks = {
   end,
 }
 
---- Return the callback {LSP Method: callback} table for `clangd`'s `fileStatus` extension
---@returns Table of extension method callbacks, to be added to your `clangd` config
+--- Return the handler {LSP Method: handler} table for `clangd`'s `fileStatus` extension
+--@returns Table of extension method handlers, to be added to your `clangd` config
 local function setup()
-  return callbacks
+  return handlers
 end
 
 local M = {
@@ -31,6 +31,6 @@ local M = {
   setup = setup
 }
 
-M = vim.tbl_extend('error', M, callbacks)
+M = vim.tbl_extend('error', M, handlers)
 
 return M

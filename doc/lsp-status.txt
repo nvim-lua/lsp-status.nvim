@@ -45,7 +45,7 @@ example:>
 
   -- Some arbitrary servers
   nvim_lsp.clangd.setup({
-    callbacks = lsp_status.extensions.clangd.setup(),
+    handlers = lsp_status.extensions.clangd.setup(),
     init_options = {
       clangdFileStatus = true
     },
@@ -54,7 +54,7 @@ example:>
   })
 
   nvim_lsp.pyls_ms.setup({
-    callbacks = lsp_status.extensions.pyls_ms.setup(),
+    handlers = lsp_status.extensions.pyls_ms.setup(),
     settings = { python = { workspaceSymbols = { enabled = true }}},
     on_attach = lsp_status.on_attach,
     capabilities = lsp_status.capabilities
@@ -163,7 +163,7 @@ register_client({id}, {name})                   *lsp-status.register_client()*
                     {name}(required, string) Client name
 
 register_progress()                           *lsp-status.register_progress()*
-                Register the progress callback with Neovim's LSP client. Call
+                Register the progress handler with Neovim's LSP client. Call
                 once before starting any servers
 
 status()                                                 *lsp-status.status()*
@@ -187,10 +187,10 @@ update_current_function()               *lsp-status.update_current_function()*
 Module: lsp-status.clangd                              *lsp-status-api-clangd*
 
 setup()                                 *lsp-status.extensions.clangd.setup()*
-                Return the callback {LSP Method: callback} table for `clangd` 's `fileStatus` extension
+                Return the handler {LSP Method: handler} table for `clangd` 's `fileStatus` extension
 
                 Return: ~
-                    Table of extension method callbacks, to be added to your
+                    Table of extension method handlers, to be added to your
                   `clangd` config
 
 
@@ -198,10 +198,10 @@ setup()                                 *lsp-status.extensions.clangd.setup()*
 Module: lsp-status.pyls_ms                            *lsp-status-api-pyls_ms*
 
 setup()                                *lsp-status.extensions.pyls_ms.setup()*
-                Return the callback {LSP Method: callback} table for `MPLS` 's progress and statusbar message extensions
+                Return the handler {LSP Method: handler} table for `MPLS` 's progress and statusbar message extensions
 
                 Return: ~
-                    Table of extension method callbacks, to be added to your
+                    Table of extension method handlers, to be added to your
                   `pyls_ms` config
 
  vim:tw=78:ts=2:ft=help:norl:

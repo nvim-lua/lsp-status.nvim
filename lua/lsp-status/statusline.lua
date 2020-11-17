@@ -82,9 +82,11 @@ local function statusline_lsp()
 
   local base_status = vim.trim(table.concat(status_parts, ' ') .. ' ' .. table.concat(msgs, ' '))
   local symbol = config.status_symbol .. ((some_diagnostics and only_hint) and '' or ' ')
-  local current_function = vim.b.lsp_current_function
-  if current_function and current_function ~= '' then
-    symbol = symbol .. '(' .. current_function .. ') '
+  if config.current_function then
+    local current_function = vim.b.lsp_current_function
+    if current_function and current_function ~= '' then
+      symbol = symbol .. '(' .. current_function .. ') '
+    end
   end
 
   if base_status ~= '' then

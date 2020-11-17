@@ -1,6 +1,7 @@
 local _config = {}
 local default_config = {
   kind_labels = {},
+  current_function = true,
   indicator_errors = '',
   indicator_warnings = '',
   indicator_info = '🛈',
@@ -62,7 +63,7 @@ local function config(user_config)
   pyls_ms._init(messages, _config)
   clangd._init(messages, _config)
   messaging._init(messages, _config)
-  current_function._init(messages, _config)
+  if _config.current_function then current_function._init(messages, _config) end
   statusline._init(messages, _config)
 end
 
@@ -86,7 +87,7 @@ local function on_attach(client)
 
   -- If the client is a documentSymbolProvider, set up an autocommand
   -- to update the containing symbol
-  if client.resolved_capabilities.document_symbol then
+  if _config.current_function and client.resolved_capabilities.document_symbol then
     vim.api.nvim_command('augroup lsp_aucmds')
     vim.api.nvim_command(
       'au CursorHold <buffer> lua require("lsp-status").update_current_function()'

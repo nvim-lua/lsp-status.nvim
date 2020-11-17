@@ -111,6 +111,8 @@ lsp_status.config {
   end
 }
 ```
+- `current_function`: Boolean, `true` if the current function should be updated and displayed in the
+  default statusline component.
 
 ## Example Use
 

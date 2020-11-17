@@ -97,6 +97,9 @@ config({config})                                   *lsp-status.config()*
                   `function(cursor_pos, document_symbol)` that should return
                   `true` if `document_symbol` (a `DocumentSymbol` ) should be
                   accepted as the symbol currently containing the cursor.• 
+                • `current_function`: Boolean, `true` if the current function
+                  should be updated and displayed in the default statusline
+                  component.
                 • `indicator_errors` : Symbol to place next to the error count
                   in `status` . Default: '',• 
                 • `indicator_warnings` : Symbol to place next to the warning

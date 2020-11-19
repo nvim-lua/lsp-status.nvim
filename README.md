@@ -3,6 +3,9 @@
 This is a Neovim plugin/library for generating statusline components from the built-in LSP client.
 
 ## Notices
+- **2020/11/19**: Please note that the default diagnostics symbols require Font Awesome or a [Nerd
+  Font](https://www.nerdfonts.com/). You may also change the diagnostics symbols as shown in the
+  [configuration](#configuration) section.
 - **2020/11/13**: Due to [this PR](https://github.com/neovim/neovim/pull/12655), you must update to
   the latest Neovim `master` to avoid errors with the old diagnostics API. See [issue
   #19](https://github.com/nvim-lua/lsp-status.nvim/issues/19) for more information.

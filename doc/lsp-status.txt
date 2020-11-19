@@ -22,6 +22,10 @@ You need to be running a version of Neovim recent enough to have the native
 LSP client included. It's also recommended to use
 https://github.com/neovim/nvim-lsp.
 
+Please note that the default diagnostics symbols require Font Awesome or a Nerd
+Font (https://www.nerdfonts.com/). You may also change the diagnostics symbols
+as shown in the configuration section of the README.
+
 ==============================================================================
 FEATURES                                         *lsp-status-intro-features*
 

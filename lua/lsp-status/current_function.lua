@@ -11,6 +11,10 @@ end
 -- Find current function context
 local function current_function_callback(_, _, result, _, _)
   vim.b.lsp_current_function = ''
+  if type(result) ~= table then
+    return
+  end
+
   local function_symbols = util.filter(util.extract_symbols(result),
     function(_, v)
       return v.kind == 'Class' or v.kind == 'Function' or v.kind == 'Method'

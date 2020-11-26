@@ -116,6 +116,18 @@ lsp_status.config {
 ```
 - `current_function`: Boolean, `true` if the current function should be updated and displayed in the
   default statusline component.
+- `indicator_*`-group: strings to show as diagnostic warnings. If you don't have Nerd/Awesome Fonts you can replace defaults with ASCII chars like this:
+```
+-- Put this somewhere near lsp_status.register_progress()
+  lsp_status.config({
+    indicator_errors = 'E',
+    indicator_warnings = 'W',
+    indicator_info = 'i',
+    indicator_hint = '?',
+    indicator_ok = 'Ok',
+  })
+```
+
 
 ## Example Use
 

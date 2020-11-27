@@ -11,7 +11,7 @@ end
 -- Find current function context
 local function current_function_callback(_, _, result, _, _)
   vim.b.lsp_current_function = ''
-  if type(result) ~= table then
+  if type(result) ~= 'table' then
     return
   end
 

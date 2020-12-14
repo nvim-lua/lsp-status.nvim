@@ -2,6 +2,7 @@ local _config = {}
 local default_config = {
   kind_labels = {},
   current_function = true,
+  indicator_separator = ' ',
   indicator_errors = '',
   indicator_warnings = '',
   indicator_info = '🛈',

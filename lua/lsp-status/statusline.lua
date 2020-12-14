@@ -21,25 +21,25 @@ local function statusline_lsp()
   local some_diagnostics = false
   local status_parts = {}
   if buf_diagnostics.errors and buf_diagnostics.errors > 0 then
-    table.insert(status_parts, config.indicator_errors .. ' ' .. buf_diagnostics.errors)
+    table.insert(status_parts, config.indicator_errors .. config.indicator_separator .. buf_diagnostics.errors)
     only_hint = false
     some_diagnostics = true
   end
 
   if buf_diagnostics.warnings and buf_diagnostics.warnings > 0 then
-    table.insert(status_parts, config.indicator_warnings .. ' ' .. buf_diagnostics.warnings)
+    table.insert(status_parts, config.indicator_warnings .. config.indicator_separator .. buf_diagnostics.warnings)
     only_hint = false
     some_diagnostics = true
   end
 
   if buf_diagnostics.info and buf_diagnostics.info > 0 then
-    table.insert(status_parts, config.indicator_info .. ' ' .. buf_diagnostics.info)
+    table.insert(status_parts, config.indicator_info .. config.indicator_separator .. buf_diagnostics.info)
     only_hint = false
     some_diagnostics = true
   end
 
   if buf_diagnostics.hints and buf_diagnostics.hints > 0 then
-    table.insert(status_parts, config.indicator_hint .. ' ' .. buf_diagnostics.hints)
+    table.insert(status_parts, config.indicator_hint .. config.indicator_separator .. buf_diagnostics.hints)
     some_diagnostics = true
   end
 

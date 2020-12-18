@@ -2,6 +2,15 @@ local _config = {}
 local default_config = {
   kind_labels = {},
   current_function = true,
+  diagnostics = true,
+  messages = true,
+  client_name = true,
+  messages = true,
+  progress = true,
+  progress_title = true,
+  progress_messages = true,
+  progress_percentage = true,
+  progress_spinner = true,
   indicator_separator = ' ',
   indicator_errors = '',
   indicator_warnings = '',
@@ -81,8 +90,15 @@ local function on_attach(client)
   -- Set up autocommands to refresh the statusline when information changes
   vim.api.nvim_command('augroup lsp_aucmds')
   vim.api.nvim_command('au! * <buffer>')
-  vim.api.nvim_command('au User LspDiagnosticsChanged redrawstatus!')
-  vim.api.nvim_command('au User LspMessageUpdate redrawstatus!')
+
+  if _config.diagnostics then
+    vim.api.nvim_command('au User LspDiagnosticsChanged redrawstatus!')
+  end
+
+  if _config.messages then
+    vim.api.nvim_command('au User LspMessageUpdate redrawstatus!')
+  end
+
   vim.api.nvim_command('au User LspStatusUpdate redrawstatus!')
   vim.api.nvim_command('augroup END')
 

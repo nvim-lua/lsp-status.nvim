@@ -43,7 +43,7 @@ local function progress_callback(_, _, msg, client_id)
     table.insert(messages[client_id], {content = val, show_once = true, shown = 0})
   end
 
-  vim.api.nvim_command('doautocmd User LspMessageUpdate')
+  vim.api.nvim_command('doautocmd <nomodeline> User LspMessageUpdate')
 end
 
 -- Process messages

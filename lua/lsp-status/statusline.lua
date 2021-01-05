@@ -10,12 +10,13 @@ local aliases = {
   pyls_ms = 'MPLS',
 }
 
-local function statusline_lsp()
-  if #vim.lsp.buf_get_clients() == 0 then
+local function statusline_lsp(bufnr)
+  bufnr = bufnr or 0
+  if #vim.lsp.buf_get_clients(bufnr) == 0 then
     return ''
   end
 
-  local buf_diagnostics = diagnostics()
+  local buf_diagnostics = diagnostics(bufnr)
   local buf_messages = messages()
   local only_hint = true
   local some_diagnostics = false

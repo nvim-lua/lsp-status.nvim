@@ -1,5 +1,5 @@
 -- Gather diagnostics
-local function get_all_diagnostics()
+local function get_all_diagnostics(bufnr)
   local result = {}
   local levels = {
     errors = 'Error',
@@ -9,7 +9,7 @@ local function get_all_diagnostics()
   }
 
   for k, level in pairs(levels) do
-    result[k] = vim.lsp.diagnostic.get_count(0, level)
+    result[k] = vim.lsp.diagnostic.get_count(bufnr, level)
   end
 
   return result

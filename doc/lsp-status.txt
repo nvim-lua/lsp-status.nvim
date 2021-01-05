@@ -86,7 +86,7 @@ example:>
 ==============================================================================
 API: core module lsp-status                                   *lsp-status-api*
 
-capabilities()                                     *lsp-status.capabilities()*
+capabilities                                       *lsp-status.capabilities*
                 Table of client capabilities including progress message
                 capability. Assign or extend your server's capabilities table
                 with this

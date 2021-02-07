@@ -188,10 +188,10 @@ lua << END
 local lsp_status = require('lsp-status')
 lsp_status.register_progress()
 
-local nvim_lsp = require('nvim_lsp')
+local lspconfig = require('lspconfig')
 
 -- Some arbitrary servers
-nvim_lsp.clangd.setup({
+lspconfig.clangd.setup({
   handlers = lsp_status.extensions.clangd.setup(),
   init_options = {
     clangdFileStatus = true
@@ -200,18 +200,18 @@ nvim_lsp.clangd.setup({
   capabilities = lsp_status.capabilities
 })
 
-nvim_lsp.pyls_ms.setup({
+lspconfig.pyls_ms.setup({
   handlers = lsp_status.extensions.pyls_ms.setup(),
   settings = { python = { workspaceSymbols = { enabled = true }}},
   on_attach = lsp_status.on_attach,
   capabilities = lsp_status.capabilities
 })
 
-nvim_lsp.ghcide.setup({
+lspconfig.ghcide.setup({
   on_attach = lsp_status.on_attach,
   capabilities = lsp_status.capabilities
 })
-nvim_lsp.rust_analyzer.setup({
+lspconfig.rust_analyzer.setup({
   on_attach = lsp_status.on_attach,
   capabilities = lsp_status.capabilities
 })

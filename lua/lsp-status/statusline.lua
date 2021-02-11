@@ -97,27 +97,27 @@ local function statusline_lsp(bufnr)
   return symbol .. config.indicator_ok .. ' '
 end
 
-local function statusline_errors(icon)
+local function statusline_errors(icon, bufh)
   icon = (icon or '✗') .. ' '
-  local bufh = vim.api.nvim_get_current_buf()
+  bufh = bufh or vim.api.nvim_get_current_buf()
   local buf_diagnostics = diagnostics(bufh)
 
   local errors = buf_diagnostics.errors
   return icon .. errors
 end
 
-local function statusline_warnings(icon)
+local function statusline_warnings(icon, bufh)
   icon = (icon or '') .. ' '
-  local bufh = vim.api.nvim_get_current_buf()
+  bufh = bufh or vim.api.nvim_get_current_buf()
   local buf_diagnostics = diagnostics(bufh)
 
   local errors = buf_diagnostics.errors
   return icon .. errors
 end
 
-local function statusline_messages(icon)
+local function statusline_messages(icon, bufh)
   icon = (icon or ' ') .. ' '
-  local bufh = vim.api.nvim_get_current_buf()
+  bufh = bufh or vim.api.nvim_get_current_buf()
   local buf_diagnostics = diagnostics(bufh)
 
   local errors = buf_diagnostics.errors

@@ -32,11 +32,7 @@ local function statusline_lsp(bufnr)
     only_hint = false
     some_diagnostics = true
   end
-
-  if buf_diagnostics.info and buf_diagnostics.info > 0 then
-    table.insert(status_parts, config.indicator_info .. config.indicator_separator .. buf_diagnostics.info)
-    only_hint = false
-    some_diagnostics = true
+if buf_diagnostics.info and buf_diagnostics.info > 0 then table.insert(status_parts, config.indicator_info .. config.indicator_separator .. buf_diagnostics.info) only_hint = false some_diagnostics = true
   end
 
   if buf_diagnostics.hints and buf_diagnostics.hints > 0 then
@@ -97,9 +93,39 @@ local function statusline_lsp(bufnr)
   return symbol .. config.indicator_ok .. ' '
 end
 
+local function statusline_errors(icon)
+  icon = (icon or '✗') .. ' '
+  local bufh = vim.api.nvim_get_current_buf()
+  local buf_diagnostics = diagnostics(bufh)
+
+  local errors = buf_diagnostics.errors
+  return icon .. errors
+end
+
+local function statusline_warnings(icon)
+  icon = (icon or '') .. ' '
+  local bufh = vim.api.nvim_get_current_buf()
+  local buf_diagnostics = diagnostics(bufh)
+
+  local errors = buf_diagnostics.errors
+  return icon .. errors
+end
+
+local function statusline_messages(icon)
+  icon = (icon or ' ') .. ' '
+  local bufh = vim.api.nvim_get_current_buf()
+  local buf_diagnostics = diagnostics(bufh)
+
+  local errors = buf_diagnostics.errors
+  return icon .. errors
+end
+
 local M = {
   _init = init,
-  status = statusline_lsp
+  status = statusline_lsp,
+  errors = statusline_errors,
+  warnings = statusline_warnings,
+  messages = statusline_messages
 }
 
 return M

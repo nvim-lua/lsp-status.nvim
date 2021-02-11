@@ -32,7 +32,11 @@ local function statusline_lsp(bufnr)
     only_hint = false
     some_diagnostics = true
   end
-if buf_diagnostics.info and buf_diagnostics.info > 0 then table.insert(status_parts, config.indicator_info .. config.indicator_separator .. buf_diagnostics.info) only_hint = false some_diagnostics = true
+
+  if buf_diagnostics.info and buf_diagnostics.info > 0 then
+    table.insert(status_parts, config.indicator_info .. config.indicator_separator .. buf_diagnostics.info)
+    only_hint = false
+    some_diagnostics = true
   end
 
   if buf_diagnostics.hints and buf_diagnostics.hints > 0 then

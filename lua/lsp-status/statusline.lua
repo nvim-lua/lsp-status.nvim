@@ -4,7 +4,7 @@ local _errors
 local _warnings
 local _hints
 local _info
-local default_icons
+local icons
 
 local diagnostics = require('lsp-status/diagnostics')
 local messages = require('lsp-status/messaging').messages
@@ -13,10 +13,9 @@ local aliases = {
 }
 
 local function make_statusline_component(diagnostics_key)
-  return function(icon, bufh)
+  return function(bufh)
     bufh = bufh or vim.api.nvim_get_current_buf()
-    icon = icon or default_icons[diagnostics_key]
-    -- empty string if default icon is nil
+    local icon = icons[diagnostics_key]
     return (icon or '') .. diagnostics(bufh)[diagnostics_key]
   end
 end
@@ -24,7 +23,7 @@ end
 local function init(_, _config)
   config = vim.tbl_extend('force', config, _config)
 
-  default_icons = {
+  icons = {
     errors = config.indicator_errors,
     warnings = config.indicator_warnings,
     hints = config.indicator_hint,

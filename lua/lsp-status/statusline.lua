@@ -116,7 +116,7 @@ local function statusline_warnings(icon, bufh)
 end
 
 local function statusline_messages(icon, bufh)
-  icon = (icon or ' ') .. ' '
+  icon = (icon or '') .. ' '
   bufh = bufh or vim.api.nvim_get_current_buf()
   local buf_diagnostics = diagnostics(bufh)
 

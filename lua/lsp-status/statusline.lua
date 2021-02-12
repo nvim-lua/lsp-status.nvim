@@ -25,10 +25,10 @@ local function init(_, _config)
   config = vim.tbl_extend('force', config, _config)
 
   default_icons = {
-    errors = config.indicator_errors .. ' ',
-    warnings = config.indicator_warnings .. ' ',
-    hints = config.indicator_hint, -- this icon doesn't need extra space after it
-    info = config.indicator_info .. ' ',
+    errors = config.indicator_errors,
+    warnings = config.indicator_warnings,
+    hints = config.indicator_hint,
+    info = config.indicator_info,
   }
 
   _errors = make_statusline_component('errors')

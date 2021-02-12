@@ -176,6 +176,10 @@ local M = {
   config = config,
   on_attach = on_attach,
   status = statusline.status,
+  status_errors = statusline.errors,
+  status_warnings = statusline.warnings,
+  status_info = statusline.info,
+  status_hints = statusline.hints,
   capabilities = messaging.capabilities
 }
 

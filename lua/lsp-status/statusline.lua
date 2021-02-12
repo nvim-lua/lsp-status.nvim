@@ -97,39 +97,29 @@ local function statusline_lsp(bufnr)
   return symbol .. config.indicator_ok .. ' '
 end
 
-local function statusline_errors(icon, bufh)
-  icon = (icon or '✗') .. ' '
-  bufh = bufh or vim.api.nvim_get_current_buf()
-  local buf_diagnostics = diagnostics(bufh)
+local default_icons = {
+  errors = config.indicator_errors,
+  warnings = config.indicator_warnings,
+  hints = config.indicator_hint,
+  info = config.indicator_info
+}
 
-  local errors = buf_diagnostics.errors
-  return icon .. errors
-end
-
-local function statusline_warnings(icon, bufh)
-  icon = (icon or '') .. ' '
-  bufh = bufh or vim.api.nvim_get_current_buf()
-  local buf_diagnostics = diagnostics(bufh)
-
-  local errors = buf_diagnostics.errors
-  return icon .. errors
-end
-
-local function statusline_messages(icon, bufh)
-  icon = (icon or '') .. ' '
-  bufh = bufh or vim.api.nvim_get_current_buf()
-  local buf_diagnostics = diagnostics(bufh)
-
-  local errors = buf_diagnostics.errors
-  return icon .. errors
+local function make_statusline_component(diagnostics_key)
+  return function(icon, bufh)
+    bufh = bufh or vim.api.nvim_get_current_buf()
+    icon = icon or default_icons[diagnostics_key]
+    -- empty string if default icon is nil
+    return (icon or '') .. diagnostics(bufh)[diagnostics_key]
+  end
 end
 
 local M = {
   _init = init,
   status = statusline_lsp,
-  errors = statusline_errors,
-  warnings = statusline_warnings,
-  messages = statusline_messages
+  errors = make_statusline_component('errors'),
+  warnings = make_statusline_component('warnings'),
+  hints = make_statusline_component('hints'),
+  info = make_statusline_component('info'),
 }
 
 return M

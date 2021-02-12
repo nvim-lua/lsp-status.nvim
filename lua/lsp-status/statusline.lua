@@ -4,18 +4,12 @@ local _errors
 local _warnings
 local _hints
 local _info
+local default_icons
 
 local diagnostics = require('lsp-status/diagnostics')
 local messages = require('lsp-status/messaging').messages
 local aliases = {
   pyls_ms = 'MPLS',
-}
-
-local default_icons = {
-  errors = config.indicator_errors,
-  warnings = config.indicator_warnings,
-  hints = config.indicator_hint,
-  info = config.indicator_info
 }
 
 local function make_statusline_component(diagnostics_key)
@@ -29,6 +23,14 @@ end
 
 local function init(_, _config)
   config = vim.tbl_extend('force', config, _config)
+
+  default_icons = {
+    errors = config.indicator_errors .. ' ',
+    warnings = config.indicator_warnings .. ' ',
+    hints = config.indicator_hint, -- this icon doesn't need extra space after it
+    info = config.indicator_info .. ' ',
+  }
+
   _errors = make_statusline_component('errors')
   _warnings = make_statusline_component('warnings')
   _hints = make_statusline_component('hints')
@@ -122,13 +124,19 @@ local function statusline_lsp(bufnr)
   return symbol .. config.indicator_ok .. ' '
 end
 
+local function get_component_functions()
+  return {
+    errors = _errors,
+    warnings = _warnings,
+    hints = _hints,
+    info = _info,
+  }
+end
+
 local M = {
   _init = init,
   status = statusline_lsp,
-  errors = _errors,
-  warnings = _warnings,
-  hints = _hints,
-  info = _info,
+  _get_component_functions = get_component_functions
 }
 
 return M

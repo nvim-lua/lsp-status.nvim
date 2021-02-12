@@ -66,6 +66,7 @@ local function config(user_config)
   messaging._init(messages, _config)
   if _config.current_function then current_function._init(messages, _config) end
   statusline._init(messages, _config)
+  statusline = vim.tbl_extend('keep', statusline, statusline._get_component_functions())
 end
 
 --- Register a new server for messages.

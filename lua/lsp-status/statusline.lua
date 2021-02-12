@@ -1,14 +1,39 @@
 local config = {}
 
-local function init(_, _config)
-  config = vim.tbl_extend('force', config, _config)
-end
+local _errors
+local _warnings
+local _hints
+local _info
 
 local diagnostics = require('lsp-status/diagnostics')
 local messages = require('lsp-status/messaging').messages
 local aliases = {
   pyls_ms = 'MPLS',
 }
+
+local default_icons = {
+  errors = config.indicator_errors,
+  warnings = config.indicator_warnings,
+  hints = config.indicator_hint,
+  info = config.indicator_info
+}
+
+local function make_statusline_component(diagnostics_key)
+  return function(icon, bufh)
+    bufh = bufh or vim.api.nvim_get_current_buf()
+    icon = icon or default_icons[diagnostics_key]
+    -- empty string if default icon is nil
+    return (icon or '') .. diagnostics(bufh)[diagnostics_key]
+  end
+end
+
+local function init(_, _config)
+  config = vim.tbl_extend('force', config, _config)
+  _errors = make_statusline_component('errors')
+  _warnings = make_statusline_component('warnings')
+  _hints = make_statusline_component('hints')
+  _info = make_statusline_component('info')
+end
 
 local function statusline_lsp(bufnr)
   bufnr = bufnr or 0
@@ -97,29 +122,13 @@ local function statusline_lsp(bufnr)
   return symbol .. config.indicator_ok .. ' '
 end
 
-local default_icons = {
-  errors = config.indicator_errors,
-  warnings = config.indicator_warnings,
-  hints = config.indicator_hint,
-  info = config.indicator_info
-}
-
-local function make_statusline_component(diagnostics_key)
-  return function(icon, bufh)
-    bufh = bufh or vim.api.nvim_get_current_buf()
-    icon = icon or default_icons[diagnostics_key]
-    -- empty string if default icon is nil
-    return (icon or '') .. diagnostics(bufh)[diagnostics_key]
-  end
-end
-
 local M = {
   _init = init,
   status = statusline_lsp,
-  errors = make_statusline_component('errors'),
-  warnings = make_statusline_component('warnings'),
-  hints = make_statusline_component('hints'),
-  info = make_statusline_component('info'),
+  errors = _errors,
+  warnings = _warnings,
+  hints = _hints,
+  info = _info,
 }
 
 return M

@@ -40,35 +40,26 @@ local function get_lsp_statusline(bufnr)
   if #vim.lsp.buf_get_clients(bufnr) == 0 then return '' end
   local buf_diagnostics = config.diagnostics and diagnostics(bufnr) or nil
   local buf_messages = messages()
-  local only_hint = true
-  local some_diagnostics = false
   local status_parts = {}
   if buf_diagnostics then
     if buf_diagnostics.errors and buf_diagnostics.errors > 0 then
       table.insert(status_parts,
                    config.indicator_errors .. config.indicator_separator .. buf_diagnostics.errors)
-      only_hint = false
-      some_diagnostics = true
     end
 
     if buf_diagnostics.warnings and buf_diagnostics.warnings > 0 then
       table.insert(status_parts, config.indicator_warnings .. config.indicator_separator ..
                      buf_diagnostics.warnings)
-      only_hint = false
-      some_diagnostics = true
     end
 
     if buf_diagnostics.info and buf_diagnostics.info > 0 then
       table.insert(status_parts,
                    config.indicator_info .. config.indicator_separator .. buf_diagnostics.info)
-      only_hint = false
-      some_diagnostics = true
     end
 
     if buf_diagnostics.hints and buf_diagnostics.hints > 0 then
       table.insert(status_parts,
                    config.indicator_hint .. config.indicator_separator .. buf_diagnostics.hints)
-      some_diagnostics = true
     end
   end
 
@@ -105,7 +96,7 @@ local function get_lsp_statusline(bufnr)
   end
 
   local base_status = vim.trim(table.concat(status_parts, ' ') .. ' ' .. table.concat(msgs, ' '))
-  local symbol = config.status_symbol .. ((some_diagnostics and only_hint) and '' or ' ')
+  local symbol = config.status_symbol .. ' '
   if config.current_function then
     local current_function = vim.b.lsp_current_function
     if current_function and current_function ~= '' then

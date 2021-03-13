@@ -3,6 +3,8 @@
 This is a Neovim plugin/library for generating statusline components from the built-in LSP client.
 
 ## Notices
+- **2021/03/13**: Some users report success using the Google "Noto Emoji" font for `status_symbol`
+  and `indicator_hint`.
 - **2020/11/19**: Please note that the default diagnostics symbols require Font Awesome or a [Nerd
   Font](https://www.nerdfonts.com/). You may also change the diagnostics symbols as shown in the
   [configuration](#configuration) section.

@@ -43,6 +43,7 @@ local function progress_callback(_, _, msg, client_id)
     table.insert(messages[client_id], {content = val, show_once = true, shown = 0})
   end
 
+  require('lsp-status/statusline').update_lsp_statusline()
   vim.api.nvim_command('doautocmd <nomodeline> User LspMessageUpdate')
 end
 
@@ -95,7 +96,9 @@ local function get_messages()
   return new_messages
 end
 
-local function register_progress() vim.lsp.handlers['$/progress'] = progress_callback end
+local function register_progress()
+  vim.lsp.handlers['$/progress'] = progress_callback
+end
 
 -- Client registration for messages
 local function register_client(id, name)

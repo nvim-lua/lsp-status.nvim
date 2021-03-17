@@ -36,7 +36,7 @@ local function init(_, _config)
   _info = make_statusline_component('info')
 end
 
-local function statusline_lsp(bufnr)
+local function get_lsp_statusline(bufnr)
   bufnr = bufnr or 0
   if #vim.lsp.buf_get_clients(bufnr) == 0 then
     return ''
@@ -74,7 +74,7 @@ local function statusline_lsp(bufnr)
   for _, msg in ipairs(buf_messages) do
     local name = aliases[msg.name] or msg.name
     local client_name = '[' .. name .. ']'
-    local contents = ''
+    local contents
     if msg.progress then
       contents = msg.title
       if msg.message then
@@ -132,9 +132,31 @@ local function get_component_functions()
   }
 end
 
+--- Updates lsp statusline
+-- This function is called in lsp_handlers or lsp_notifications and will set a
+-- a variable to check if the status bar should be redrawn
+-- @return true if status changed
+local function update_lsp_statusline()
+  local new_state = get_lsp_statusline()
+  -- If equal do no redraw
+  if new_state == vim.b.lsp_status_statusline then
+    vim.b.lsp_status_redraw = false
+    return false
+  end
+  vim.b.lsp_status_statusline = new_state or ''
+  vim.b.lsp_status_redraw = true
+  return true
+end
+
+-- Status line component for nvim-lsp
+local function lsp_status()
+  return vim.b.lsp_status_statusline or ''
+end
+
 local M = {
   _init = init,
-  status = statusline_lsp,
+  status = lsp_status,
+  update_lsp_statusline = update_lsp_statusline,
   _get_component_functions = get_component_functions
 }
 

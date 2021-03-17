@@ -1,4 +1,3 @@
-local _config = {}
 local default_config = {
   kind_labels = {},
   current_function = true,
@@ -12,8 +11,8 @@ local default_config = {
   status_symbol = ' 🇻',
   select_symbol = nil
 }
+local _config = vim.deepcopy(default_config)
 
-_config = vim.deepcopy(default_config)
 local messages = {}
 
 -- Diagnostics
@@ -23,6 +22,7 @@ local messages = {}
 local function diagnostics() -- luacheck: no unused
   error() -- Stub for docs
 end
+
 local diagnostics = require('lsp-status/diagnostics')
 
 -- Messaging
@@ -79,23 +79,22 @@ local function on_attach(client)
   -- Register the client for messages
   messaging.register_client(client.id, client.name)
 
-  -- Set up autocommands to refresh the statusline when information changes
   vim.api.nvim_command('augroup lsp_aucmds')
+  -- Set up autocommands to refresh the statusline when information changes
   vim.api.nvim_command('au! * <buffer>')
-  vim.api.nvim_command('au User LspDiagnosticsChanged redrawstatus!')
-  vim.api.nvim_command('au User LspMessageUpdate redrawstatus!')
-  vim.api.nvim_command('au User LspStatusUpdate redrawstatus!')
-  vim.api.nvim_command('augroup END')
+  vim.api.nvim_command('au User LspDiagnosticsChanged if get(b:, "lsp_status_redraw", 0) | redrawstatus! | end')
+  vim.api.nvim_command('au User LspMessageUpdate if get(b:, "lsp_status_redraw", 0) | redrawstatus! | end')
+  vim.api.nvim_command('au User LspStatusUpdate if get(b:, "lsp_status_redraw", 0) | redrawstatus! | end')
 
   -- If the client is a documentSymbolProvider, set up an autocommand
   -- to update the containing symbol
   if _config.current_function and client.resolved_capabilities.document_symbol then
-    vim.api.nvim_command('augroup lsp_aucmds')
     vim.api.nvim_command(
       'au CursorHold <buffer> lua require("lsp-status").update_current_function()'
     )
-    vim.api.nvim_command('augroup END')
   end
+  vim.api.nvim_command('augroup END')
+  statusline.update_lsp_statusline()
 end
 
 config(_config)

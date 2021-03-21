@@ -17,8 +17,7 @@ local handlers = {
   ['textDocument/clangd.fileStatus'] = function(_, _, statusMessage, client_id)
     ensure_init(client_id)
     messages[client_id].status = { uri = statusMessage.uri, content = statusMessage.state }
-    statusline.update_lsp_statusline()
-    vim.api.nvim_command('doautocmd <nomodeline> User LspMessageUpdate')
+    require('lsp-status/timer').redraw = true
   end,
 }
 

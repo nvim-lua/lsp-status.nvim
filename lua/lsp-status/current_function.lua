@@ -22,8 +22,7 @@ local function current_function_callback(_, _, result, _, _)
     end)
 
   if not function_symbols or #function_symbols == 0 then
-    statusline.update_lsp_statusline()
-    vim.api.nvim_command('doautocmd <nomodeline> User LspStatusUpdate')
+    vim.lsp_status_redraw = true
     return
   end
 
@@ -40,8 +39,7 @@ local function current_function_callback(_, _, result, _, _)
       end
 
       vim.b.lsp_current_function = fn_name
-      statusline.update_lsp_statusline()
-      vim.api.nvim_command('doautocmd <nomodeline> User LspStatusUpdate')
+      vim.lsp_status_redraw = true
       return
     end
   end

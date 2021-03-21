@@ -79,22 +79,17 @@ local function on_attach(client)
   -- Register the client for messages
   messaging.register_client(client.id, client.name)
 
-  vim.api.nvim_command('augroup lsp_aucmds')
-  -- Set up autocommands to refresh the statusline when information changes
-  vim.api.nvim_command('au! * <buffer>')
-  vim.api.nvim_command('au User LspDiagnosticsChanged if get(b:, "lsp_status_redraw", 0) | redrawstatus! | end')
-  vim.api.nvim_command('au User LspMessageUpdate if get(b:, "lsp_status_redraw", 0) | redrawstatus! | end')
-  vim.api.nvim_command('au User LspStatusUpdate if get(b:, "lsp_status_redraw", 0) | redrawstatus! | end')
-
   -- If the client is a documentSymbolProvider, set up an autocommand
   -- to update the containing symbol
   if _config.current_function and client.resolved_capabilities.document_symbol then
+    vim.api.nvim_command('augroup lsp_aucmds')
     vim.api.nvim_command(
       'au CursorHold <buffer> lua require("lsp-status").update_current_function()'
     )
+    vim.api.nvim_command('augroup END')
   end
-  vim.api.nvim_command('augroup END')
-  statusline.update_lsp_statusline()
+
+  require('lsp-status/timer').register_timer()
 end
 
 config(_config)

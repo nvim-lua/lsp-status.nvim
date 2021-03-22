@@ -1,5 +1,5 @@
+--- Timer instance
 local timer = nil
-local text = ''
 
 --- Timer callback function
 -- NOTE: This function uses get_lsp_statusline so that needs nvim api functions
@@ -10,9 +10,8 @@ local function timer_callback()
     vim.b.lsp_status_redraw = false
     -- Schedule the command when it's safe to call it
     local new_state = require('lsp-status/statusline').get_lsp_statusline()
-    if new_state ~= text then
-      text = new_state
-      vim.b.lsp_status_statusline = text
+    if new_state ~= vim.b.lsp_status_statusline then
+      vim.b.lsp_status_statusline = new_state
       vim.api.nvim_command('redrawstatus!')
     end
   end
@@ -32,7 +31,6 @@ local function register_timer()
     return
   end
   timer = vim.loop.new_timer()
-  Redraw = true
   -- Execute the timer every 100 milliseconds
   -- NOTE: This could be 30 to get a 30 updates per seconds, but set to 100 to
   -- copy coc.nvim status interval
@@ -41,8 +39,6 @@ end
 
 local M = {
   timer = timer,
-  Redraw = Redraw,
-  text = text,
   register_timer = register_timer,
 }
 

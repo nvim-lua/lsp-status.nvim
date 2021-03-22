@@ -1,5 +1,4 @@
 local util = require('lsp-status/util')
-local statusline = require('lsp-status/statusline')
 
 local messages = {}
 

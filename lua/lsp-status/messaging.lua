@@ -43,7 +43,7 @@ local function progress_callback(_, _, msg, client_id)
     table.insert(messages[client_id], {content = val, show_once = true, shown = 0})
   end
 
-  require('lsp-status/timer').redraw = true
+  vim.b.lsp_status_redraw = true
 end
 
 -- Process messages

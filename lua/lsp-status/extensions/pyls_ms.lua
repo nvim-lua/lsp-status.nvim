@@ -16,7 +16,7 @@ local handlers =  {
   ['python/setStatusBarMessage'] = function(_, _, message, client_id)
     ensure_init(client_id)
     messages[client_id].static_message = { content = message[1] }
-    require('lsp-status/timer').redraw = true
+    vim.b.lsp_status_redraw = true
   end,
   ['python/beginProgress'] = function(_, _, _, client_id)
     ensure_init(client_id)
@@ -27,11 +27,11 @@ local handlers =  {
   ['python/reportProgress'] = function(_, _, message, client_id)
     messages[client_id].progress[1].spinner = messages[client_id].progress[1].spinner + 1
     messages[client_id].progress[1].title = message[1]
-    require('lsp-status/timer').redraw = true
+    vim.b.lsp_status_redraw = true
   end,
   ['python/endProgress'] = function(_, _, _, client_id)
     messages[client_id].progress[1] = nil
-    require('lsp-status/timer').redraw = true
+    vim.b.lsp_status_redraw = true
   end,
 }
 

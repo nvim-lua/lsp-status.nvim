@@ -134,7 +134,7 @@ end
 
 -- Status line component for nvim-lsp
 local function lsp_status()
-  return vim.g.lsp_status_statusline or ''
+  return vim.b.lsp_status_statusline or ''
 end
 
 local M = {

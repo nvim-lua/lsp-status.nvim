@@ -16,8 +16,8 @@ local handlers = {
   ['textDocument/clangd.fileStatus'] = function(_, _, statusMessage, client_id)
     ensure_init(client_id)
     messages[client_id].status = { uri = statusMessage.uri, content = statusMessage.state }
-    vim.b.lsp_status_redraw = true
   end,
+    vim.g.lsp_status_redraw = true
 }
 
 --- Return the handler {LSP Method: handler} table for `clangd`'s `fileStatus` extension

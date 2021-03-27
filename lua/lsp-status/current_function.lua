@@ -21,7 +21,7 @@ local function current_function_callback(_, _, result, _, _)
     end)
 
   if not function_symbols or #function_symbols == 0 then
-    vim.b.lsp_status_redraw = true
+    vim.g.lsp_status_redraw = true
     return
   end
 
@@ -38,7 +38,7 @@ local function current_function_callback(_, _, result, _, _)
       end
 
       vim.b.lsp_current_function = fn_name
-      vim.b.lsp_status_redraw = true
+      vim.g.lsp_status_redraw = true
       return
     end
   end

@@ -8,9 +8,7 @@ local icons
 
 local diagnostics = require('lsp-status/diagnostics')
 local messages = require('lsp-status/messaging').messages
-local aliases = {
-  pyls_ms = 'MPLS',
-}
+local aliases = {pyls_ms = 'MPLS'}
 
 local function make_statusline_component(diagnostics_key)
   return function(bufh)
@@ -27,7 +25,7 @@ local function init(_, _config)
     errors = config.indicator_errors,
     warnings = config.indicator_warnings,
     hints = config.indicator_hint,
-    info = config.indicator_info,
+    info = config.indicator_info
   }
 
   _errors = make_statusline_component('errors')
@@ -38,35 +36,36 @@ end
 
 local function get_lsp_statusline(bufnr)
   bufnr = bufnr or 0
-  if #vim.lsp.buf_get_clients(bufnr) == 0 then
-    return ''
-  end
-
+  if #vim.lsp.buf_get_clients(bufnr) == 0 then return '' end
   local buf_diagnostics = diagnostics(bufnr)
   local buf_messages = messages()
   local only_hint = true
   local some_diagnostics = false
   local status_parts = {}
   if buf_diagnostics.errors and buf_diagnostics.errors > 0 then
-    table.insert(status_parts, config.indicator_errors .. config.indicator_separator .. buf_diagnostics.errors)
+    table.insert(status_parts,
+                 config.indicator_errors .. config.indicator_separator .. buf_diagnostics.errors)
     only_hint = false
     some_diagnostics = true
   end
 
   if buf_diagnostics.warnings and buf_diagnostics.warnings > 0 then
-    table.insert(status_parts, config.indicator_warnings .. config.indicator_separator .. buf_diagnostics.warnings)
+    table.insert(status_parts, config.indicator_warnings .. config.indicator_separator ..
+                   buf_diagnostics.warnings)
     only_hint = false
     some_diagnostics = true
   end
 
   if buf_diagnostics.info and buf_diagnostics.info > 0 then
-    table.insert(status_parts, config.indicator_info .. config.indicator_separator .. buf_diagnostics.info)
+    table.insert(status_parts,
+                 config.indicator_info .. config.indicator_separator .. buf_diagnostics.info)
     only_hint = false
     some_diagnostics = true
   end
 
   if buf_diagnostics.hints and buf_diagnostics.hints > 0 then
-    table.insert(status_parts, config.indicator_hint .. config.indicator_separator .. buf_diagnostics.hints)
+    table.insert(status_parts,
+                 config.indicator_hint .. config.indicator_separator .. buf_diagnostics.hints)
     some_diagnostics = true
   end
 
@@ -77,16 +76,13 @@ local function get_lsp_statusline(bufnr)
     local contents
     if msg.progress then
       contents = msg.title
-      if msg.message then
-        contents = contents .. ' ' .. msg.message
-      end
+      if msg.message then contents = contents .. ' ' .. msg.message end
 
-      if msg.percentage then
-        contents = contents .. ' (' .. msg.percentage .. ')'
-      end
+      if msg.percentage then contents = contents .. ' (' .. msg.percentage .. ')' end
 
       if msg.spinner then
-        contents = config.spinner_frames[(msg.spinner % #config.spinner_frames) + 1] .. ' ' .. contents
+        contents = config.spinner_frames[(msg.spinner % #config.spinner_frames) + 1] .. ' ' ..
+                     contents
       end
     elseif msg.status then
       contents = msg.content
@@ -94,9 +90,7 @@ local function get_lsp_statusline(bufnr)
         local filename = vim.uri_to_fname(msg.uri)
         filename = vim.fn.fnamemodify(filename, ':~:.')
         local space = math.min(60, math.floor(0.6 * vim.fn.winwidth(0)))
-        if #filename > space then
-          filename = vim.fn.pathshorten(filename)
-        end
+        if #filename > space then filename = vim.fn.pathshorten(filename) end
 
         contents = '(' .. filename .. ') ' .. contents
       end
@@ -116,26 +110,16 @@ local function get_lsp_statusline(bufnr)
     end
   end
 
-  if base_status ~= '' then
-    return symbol .. base_status .. ' '
-  end
-
+  if base_status ~= '' then return symbol .. base_status .. ' ' end
   return symbol .. config.indicator_ok .. ' '
 end
 
 local function get_component_functions()
-  return {
-    errors = _errors,
-    warnings = _warnings,
-    hints = _hints,
-    info = _info,
-  }
+  return {errors = _errors, warnings = _warnings, hints = _hints, info = _info}
 end
 
 -- Status line component for nvim-lsp
-local function lsp_status()
-  return vim.b.lsp_status_statusline or ''
-end
+local function lsp_status() return vim.g.lsp_status_statusline or '' end
 
 local M = {
   _init = init,

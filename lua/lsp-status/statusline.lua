@@ -36,7 +36,7 @@ local function init(_, _config)
   _info = make_statusline_component('info')
 end
 
-local function statusline_lsp(bufnr)
+local function get_lsp_statusline(bufnr)
   bufnr = bufnr or 0
   if #vim.lsp.buf_get_clients(bufnr) == 0 then
     return ''
@@ -74,7 +74,7 @@ local function statusline_lsp(bufnr)
   for _, msg in ipairs(buf_messages) do
     local name = aliases[msg.name] or msg.name
     local client_name = '[' .. name .. ']'
-    local contents = ''
+    local contents
     if msg.progress then
       contents = msg.title
       if msg.message then
@@ -132,9 +132,15 @@ local function get_component_functions()
   }
 end
 
+-- Status line component for nvim-lsp
+local function lsp_status()
+  return vim.b.lsp_status_statusline or ''
+end
+
 local M = {
   _init = init,
-  status = statusline_lsp,
+  status = lsp_status,
+  get_lsp_statusline = get_lsp_statusline,
   _get_component_functions = get_component_functions
 }
 

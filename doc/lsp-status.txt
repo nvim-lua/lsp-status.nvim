@@ -194,7 +194,8 @@ update_current_function()               *lsp-status.update_current_function()*
 Module: lsp-status.clangd                              *lsp-status-api-clangd*
 
 setup()                                 *lsp-status.extensions.clangd.setup()*
-                Return the handler {LSP Method: handler} table for `clangd` 's `fileStatus` extension
+                Return the handler {LSP Method: handler} table for `clangd` 's
+                `fileStatus` extension
 
                 Return: ~
                     Table of extension method handlers, to be added to your
@@ -205,7 +206,8 @@ setup()                                 *lsp-status.extensions.clangd.setup()*
 Module: lsp-status.pyls_ms                            *lsp-status-api-pyls_ms*
 
 setup()                                *lsp-status.extensions.pyls_ms.setup()*
-                Return the handler {LSP Method: handler} table for `MPLS` 's progress and statusbar message extensions
+                Return the handler {LSP Method: handler} table for `MPLS` 's
+                progress and statusbar message extensions
 
                 Return: ~
                     Table of extension method handlers, to be added to your

@@ -9,7 +9,8 @@ local default_config = {
   indicator_ok = '',
   spinner_frames = { '⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷' },
   status_symbol = ' 🇻',
-  select_symbol = nil
+  select_symbol = nil,
+  update_interval = 100
 }
 local _config = vim.deepcopy(default_config)
 
@@ -40,6 +41,7 @@ local extension_callbacks = {
 local current_function = require('lsp-status/current_function')
 
 -- Out-of-the-box statusline component
+local timer = require('lsp-status/timer')
 local statusline = require('lsp-status/statusline')
 
 --- Configure lsp-status.nvim.
@@ -66,6 +68,7 @@ local function config(user_config)
   messaging._init(messages, _config)
   if _config.current_function then current_function._init(messages, _config) end
   statusline._init(messages, _config)
+  timer._init(messages, _config)
   statusline = vim.tbl_extend('keep', statusline, statusline._get_component_functions())
 end
 
@@ -89,7 +92,7 @@ local function on_attach(client)
     vim.api.nvim_command('augroup END')
   end
 
-  require('lsp-status/timer').register_timer()
+  timer.register_timer()
 end
 
 config(_config)

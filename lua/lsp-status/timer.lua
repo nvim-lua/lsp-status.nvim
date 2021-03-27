@@ -7,6 +7,9 @@ local timer = nil
 -- statusline and this flag will be set to false.
 local redraw_flag = false
 
+local config = {}
+local function init(_, _config) config = vim.tbl_extend('force', config, _config) end
+
 --- Timer callback function
 -- NOTE: This function uses get_lsp_statusline so that needs nvim api functions
 -- so it should call in the vim.schedule_wrap()
@@ -41,15 +44,10 @@ local function register_timer()
     return
   end
   timer = vim.loop.new_timer()
-  -- Execute the timer every 100 milliseconds
-  -- NOTE: This could be 30 to get a 30 updates per seconds, but set to 100 to
-  -- copy coc.nvim status interval
-  timer:start(0, 100, vim.schedule_wrap(timer_callback))
+  -- Execute the timer every update_interval milliseconds
+  timer:start(0, config.update_interval, vim.schedule_wrap(timer_callback))
 end
 
-local M = {
-  timer = timer,
-  register_timer = register_timer,
-}
+local M = {timer = timer, register_timer = register_timer, _init = init}
 
 return M

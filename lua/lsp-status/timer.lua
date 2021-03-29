@@ -1,5 +1,5 @@
---- Timer instance
-local timer = nil
+local statusline = require('lsp-status/statusline')
+
 --- This flag is used to redraw one more time after the last LSP update.
 -- NOTE: This is achieved by setting the redraw_flag to true if
 -- vim.g.lsp_status_redraw is true and there has been an update. Next time if
@@ -19,7 +19,7 @@ local function timer_callback()
   if update_flag or redraw_flag then
     vim.g.lsp_status_redraw = false
     -- Schedule the command when it's safe to call it
-    local new_state = require('lsp-status/statusline').get_lsp_statusline()
+    local new_state = statusline.get_lsp_statusline()
     if new_state ~= vim.g.lsp_status_statusline then
       vim.g.lsp_status_statusline = new_state
       vim.api.nvim_command('redrawstatus!')
@@ -38,6 +38,8 @@ end
 -- set use the variable timer to schedule the updates.
 -- TODO: This could error if the lsp is disconnected, the timer should be
 -- stopped
+--- Timer instance
+local timer = nil
 local function register_timer()
   -- Guard the for an already defined timer
   if timer ~= nil then return end

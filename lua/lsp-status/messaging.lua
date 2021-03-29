@@ -89,9 +89,7 @@ local function get_messages()
   end
 
   for _, item in ipairs(msg_remove) do table.remove(messages[item.client].messages, item.idx) end
-
   for _, item in ipairs(progress_remove) do messages[item.client].progress[item.token] = nil end
-
   return new_messages
 end
 

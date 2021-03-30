@@ -7,7 +7,7 @@ local default_config = {
   indicator_info = '🛈',
   indicator_hint = '❗',
   indicator_ok = '',
-  spinner_frames = { '⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷' },
+  spinner_frames = {'⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷'},
   status_symbol = ' 🇻',
   select_symbol = nil,
   update_interval = 100
@@ -19,7 +19,7 @@ local messages = {}
 -- Diagnostics
 --- Get all diagnostics for the current buffer.
 --- Convenience function to retrieve all diagnostic counts for the current buffer.
---@returns `{ 'Error': error_count, 'Warning': warning_count', 'Info': info_count, 'Hint': hint_count `}
+-- @returns `{ 'Error': error_count, 'Warning': warning_count', 'Info': info_count, 'Hint': hint_count `}
 local function diagnostics() -- luacheck: no unused
   error() -- Stub for docs
 end
@@ -32,16 +32,13 @@ local messaging = require('lsp-status/messaging')
 -- LSP extensions
 local pyls_ms = require('lsp-status/extensions/pyls_ms')
 local clangd = require('lsp-status/extensions/clangd')
-local extension_callbacks = {
-  pyls_ms = pyls_ms,
-  clangd = clangd
-}
+local extension_callbacks = {pyls_ms = pyls_ms, clangd = clangd}
 
 -- Find current enclosing function
 local current_function = require('lsp-status/current_function')
 
 -- Out-of-the-box statusline component
-local timer = require('lsp-status/timer')
+local redraw = require('lsp-status/redraw')
 local statusline = require('lsp-status/statusline')
 
 --- Configure lsp-status.nvim.
@@ -59,7 +56,7 @@ local statusline = require('lsp-status/statusline')
 --- - `spinner_frames`: Animation frames for progress spinner in `status`. Default: { '⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷' },
 --- - `status_symbol`: Symbol to start the statusline segment in `status`. Default: ' 🇻',
 ---
---@param config: (required, table) Table of values; keys are as listed above. Accept defaults by
+-- @param config: (required, table) Table of values; keys are as listed above. Accept defaults by
 --- omitting the relevant key.
 local function config(user_config)
   _config = vim.tbl_extend('keep', user_config, _config, default_config)
@@ -68,7 +65,7 @@ local function config(user_config)
   messaging._init(messages, _config)
   if _config.current_function then current_function._init(messages, _config) end
   statusline._init(messages, _config)
-  timer._init(messages, _config)
+  redraw._init(messages, _config)
   statusline = vim.tbl_extend('keep', statusline, statusline._get_component_functions())
 end
 
@@ -77,20 +74,19 @@ end
 --- registers the server with `lsp-status` for progress message handling and current function
 --- updating
 ---
---@param client: (required, vim.lsp.client)
+-- @param client: (required, vim.lsp.client)
 local function on_attach(client)
   -- Register the client for messages
   messaging.register_client(client.id, client.name)
   vim.api.nvim_command('augroup lsp_aucmds')
   vim.api.nvim_command('au! * <buffer>')
-  vim.api.nvim_command('au User LspDiagnosticsChanged lua require("lsp-status/timer").redraw()')
+  vim.api.nvim_command('au User LspDiagnosticsChanged lua require("lsp-status/redraw").redraw()')
 
   -- If the client is a documentSymbolProvider, set up an autocommand
   -- to update the containing symbol
   if _config.current_function and client.resolved_capabilities.document_symbol then
     vim.api.nvim_command(
-      'au CursorHold <buffer> lua require("lsp-status").update_current_function()'
-    )
+      'au CursorHold <buffer> lua require("lsp-status").update_current_function()')
   end
 
   vim.api.nvim_command('augroup END')
@@ -128,7 +124,7 @@ end
 --- Normal messages are tables of the form
 --- `{ name = Server name, content = Message contents }`
 ---
---@returns list of messages
+-- @returns list of messages
 local function messages() -- luacheck: no unused
   error()
 end
@@ -142,8 +138,8 @@ end
 --- Register a new server to receive messages.
 --- Generally, you don't need to call this manually - `on_attach` sets it up for you
 ---
---@param id: (required, number) Client ID
---@param name: (required, string) Client name
+-- @param id: (required, number) Client ID
+-- @param name: (required, string) Client name
 local function register_client(id, name) -- luacheck: no unused
   error()
 end
@@ -154,7 +150,7 @@ end
 --- Usable out of the box, but intended more as an example/template for modification to customize
 --- to your own needs
 ---
---@returns: statusline component string
+-- @returns: statusline component string
 local function status() -- luacheck: no unused
   error()
 end

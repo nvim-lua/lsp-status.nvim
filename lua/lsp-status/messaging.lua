@@ -1,4 +1,5 @@
 local util = require('lsp-status/util')
+local redraw = require('lsp-status/redraw')
 
 local clients = {}
 local messages = {}
@@ -43,7 +44,7 @@ local function progress_callback(_, _, msg, client_id)
     table.insert(messages[client_id], {content = val, show_once = true, shown = 0})
   end
 
-  vim.g.lsp_status_redraw = true
+  redraw.redraw()
 end
 
 -- Process messages

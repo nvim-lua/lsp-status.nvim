@@ -1,4 +1,5 @@
 local util = require('lsp-status/util')
+local redraw = require('lsp-status/redraw')
 
 local messages = {}
 
@@ -12,7 +13,7 @@ local handlers = {
   ['textDocument/clangd.fileStatus'] = function(_, _, statusMessage, client_id)
     ensure_init(client_id)
     messages[client_id].status = {uri = statusMessage.uri, content = statusMessage.state}
-    vim.g.lsp_status_redraw = true
+    redraw.redraw()
   end
 }
 

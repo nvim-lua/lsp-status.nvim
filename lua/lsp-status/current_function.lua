@@ -1,6 +1,7 @@
 -- Utilities
 local lsp_util = require('vim.lsp.util')
 local util = require('lsp-status/util')
+local redraw = require('lsp-status/redraw')
 
 local _config = {}
 
@@ -21,7 +22,7 @@ local function current_function_callback(_, _, result, _, _)
     end)
 
   if not function_symbols or #function_symbols == 0 then
-    vim.g.lsp_status_redraw = true
+    redraw.redraw()
     return
   end
 
@@ -38,7 +39,7 @@ local function current_function_callback(_, _, result, _, _)
       end
 
       vim.b.lsp_current_function = fn_name
-      vim.g.lsp_status_redraw = true
+      redraw.redraw()
       return
     end
   end

@@ -1,5 +1,5 @@
 local util = require('lsp-status/util')
-local statusline = require('lsp-status/statusline')
+local redraw = require('lsp-status/redraw')
 
 local messages = {}
 ---@private
@@ -12,7 +12,7 @@ local handlers = {
   ['python/setStatusBarMessage'] = function(_, _, message, client_id)
     ensure_init(client_id)
     messages[client_id].static_message = {content = message[1]}
-    vim.g.lsp_status_redraw = true
+    redraw.redraw()
   end,
   ['python/beginProgress'] = function(_, _, _, client_id)
     ensure_init(client_id)
@@ -23,11 +23,11 @@ local handlers = {
   ['python/reportProgress'] = function(_, _, message, client_id)
     messages[client_id].progress[1].spinner = messages[client_id].progress[1].spinner + 1
     messages[client_id].progress[1].title = message[1]
-    vim.g.lsp_status_redraw = true
+    redraw.redraw()
   end,
   ['python/endProgress'] = function(_, _, _, client_id)
     messages[client_id].progress[1] = nil
-    vim.g.lsp_status_redraw = true
+    redraw.redraw()
   end
 }
 

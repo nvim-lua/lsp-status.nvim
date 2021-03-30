@@ -20,7 +20,8 @@ local function redraw()
     redraw_callback(now)
   elseif not timer_going then
     timer_going = true
-    vim.loop.timer_start(timer, config.update_interval, 0, wrapped_redraw_callback)
+    vim.loop.timer_start(timer, config.update_interval + last_redraw - now, 0,
+                         wrapped_redraw_callback)
   end
 end
 

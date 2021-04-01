@@ -1,4 +1,5 @@
 local util = require('lsp-status/util')
+local redraw = require('lsp-status/redraw')
 
 local clients = {}
 local messages = {}
@@ -30,8 +31,8 @@ local function progress_callback(_, _, msg, client_id)
       if messages[client_id].progress[msg.token] == nil then
         vim.api.nvim_command('echohl WarningMsg')
         vim.api.nvim_command(
-          'echom "[lsp-status] Received `end` message with no corresponding `begin` from  '
-            .. clients[client_id] .. '!"')
+          'echom "[lsp-status] Received `end` message with no corresponding `begin` from  ' ..
+            clients[client_id] .. '!"')
         vim.api.nvim_command('echohl None')
       else
         messages[client_id].progress[msg.token].message = val.message
@@ -43,7 +44,7 @@ local function progress_callback(_, _, msg, client_id)
     table.insert(messages[client_id], {content = val, show_once = true, shown = 0})
   end
 
-  vim.g.lsp_status_redraw = true
+  redraw.redraw()
 end
 
 -- Process messages
@@ -93,9 +94,7 @@ local function get_messages()
   return new_messages
 end
 
-local function register_progress()
-  vim.lsp.handlers['$/progress'] = progress_callback
-end
+local function register_progress() vim.lsp.handlers['$/progress'] = progress_callback end
 
 -- Client registration for messages
 local function register_client(id, name)

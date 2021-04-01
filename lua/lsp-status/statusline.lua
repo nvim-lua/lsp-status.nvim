@@ -118,13 +118,9 @@ local function get_component_functions()
   return {errors = _errors, warnings = _warnings, hints = _hints, info = _info}
 end
 
--- Status line component for nvim-lsp
-local function lsp_status() return vim.g.lsp_status_statusline or '' end
-
 local M = {
   _init = init,
-  status = lsp_status,
-  get_lsp_statusline = get_lsp_statusline,
+  status = get_lsp_statusline,
   _get_component_functions = get_component_functions
 }
 

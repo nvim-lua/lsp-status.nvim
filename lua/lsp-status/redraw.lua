@@ -16,7 +16,6 @@ local function redraw()
   local now = vim.loop.now()
   if last_redraw == nil or now - last_redraw >= config.update_interval then
     vim.loop.timer_stop(timer)
-    timer_going = false
     redraw_callback(now)
   elseif not timer_going then
     timer_going = true

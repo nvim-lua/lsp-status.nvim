@@ -23,7 +23,9 @@ local function current_function_callback(_, _, result, _, _)
               v.kind == 'Method' or 
               v.kind == 'Struct' or 
               v.kind == 'Enum' or 
-              v.kind == 'Interface')
+              v.kind == 'Interface' or
+              v.kind == 'Namespace' or
+              v.kind == 'Module')
     end)
 
   if not function_symbols or #function_symbols == 0 then

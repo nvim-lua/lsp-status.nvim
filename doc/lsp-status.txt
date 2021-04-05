@@ -103,7 +103,8 @@ config({config})                                   *lsp-status.config()*
                   accepted as the symbol currently containing the cursor.• 
                 • `current_function`: Boolean, `true` if the current function
                   should be updated and displayed in the default statusline
-                  component.
+                  component. Shows the current function, method, class,
+                  struct, interface, enum, module, or namespace.
                 • `indicator_errors` : Symbol to place next to the error count
                   in `status` . Default: '',• 
                 • `indicator_warnings` : Symbol to place next to the warning

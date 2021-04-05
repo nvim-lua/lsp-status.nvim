@@ -52,6 +52,7 @@ call packager#add('nvim-lua/lsp-status.nvim')
 The plugin provides several utilities:
 ```lua
 update_current_function() -- Set/reset the b:lsp_current_function variable
+-- Shows the current function, method, class, struct, interface, enum, module, or namespace
 diagnostics() -- Return a table with all diagnostic counts for the current buffer
 messages() -- Return a table listing progress and other status messages for display
 register_progress() -- Register the provided handler for progress messages

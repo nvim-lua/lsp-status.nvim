@@ -18,7 +18,12 @@ local function current_function_callback(_, _, result, _, _)
 
   local function_symbols = util.filter(util.extract_symbols(result),
     function(_, v)
-      return v.kind == 'Class' or v.kind == 'Function' or v.kind == 'Method'
+      return (v.kind == 'Class' or
+              v.kind == 'Function' or 
+              v.kind == 'Method' or 
+              v.kind == 'Struct' or 
+              v.kind == 'Enum' or 
+              v.kind == 'Interface')
     end)
 
   if not function_symbols or #function_symbols == 0 then

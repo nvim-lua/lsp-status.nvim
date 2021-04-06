@@ -11,14 +11,14 @@ end
 
 -- the symbol kinds which are valid scopes
 local scope_kinds = {
- 'Class' = true,
- 'Function' = true,
- 'Method' = true,
- 'Struct' = true,
- 'Enum' = true,
- 'Interface' = true,
- 'Namespace' = true,
- 'Module' = true,
+ Class = true,
+ Function = true,
+ Method = true,
+ Struct = true,
+ Enum = true,
+ Interface = true,
+ Namespace = true,
+ Module = true,
 }
 
 -- Find current function context

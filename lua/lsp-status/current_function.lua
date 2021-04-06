@@ -30,7 +30,7 @@ local function current_function_callback(_, _, result, _, _)
 
   local function_symbols = util.filter(util.extract_symbols(result),
     function(_, v)
-      return scope_kinds[v]
+      return scope_kinds[v.kind]
     end)
 
   if not function_symbols or #function_symbols == 0 then

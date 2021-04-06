@@ -9,6 +9,18 @@ local function init(_, config)
   _config = config
 end
 
+-- the symbol kinds which are valid scopes
+local scope_kinds = {
+ 'Class' = true,
+ 'Function' = true,
+ 'Method' = true,
+ 'Struct' = true,
+ 'Enum' = true,
+ 'Interface' = true,
+ 'Namespace' = true,
+ 'Module' = true,
+}
+
 -- Find current function context
 local function current_function_callback(_, _, result, _, _)
   vim.b.lsp_current_function = ''
@@ -18,14 +30,7 @@ local function current_function_callback(_, _, result, _, _)
 
   local function_symbols = util.filter(util.extract_symbols(result),
     function(_, v)
-      return (v.kind == 'Class' or
-              v.kind == 'Function' or 
-              v.kind == 'Method' or 
-              v.kind == 'Struct' or 
-              v.kind == 'Enum' or 
-              v.kind == 'Interface' or
-              v.kind == 'Namespace' or
-              v.kind == 'Module')
+      return scope_kinds[v]
     end)
 
   if not function_symbols or #function_symbols == 0 then

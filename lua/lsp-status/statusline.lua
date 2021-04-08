@@ -112,7 +112,8 @@ local function get_lsp_statusline(bufnr)
     end
   end
 
-  if not config.diagnostics or base_status ~= '' then return symbol .. base_status .. ' ' end
+  if base_status ~= '' then return symbol .. base_status .. ' ' end
+  if not config.diagnostics then return symbol end
   return symbol .. config.indicator_ok .. ' '
 end
 

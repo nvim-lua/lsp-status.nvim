@@ -1,6 +1,7 @@
 local default_config = {
   kind_labels = {},
   current_function = true,
+  diagnostics = true,
   indicator_separator = ' ',
   indicator_errors = '',
   indicator_warnings = '',

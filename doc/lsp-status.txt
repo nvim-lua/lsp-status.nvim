@@ -119,6 +119,9 @@ config({config})                                   *lsp-status.config()*
                   },• 
                 • `status_symbol` : Symbol to start the statusline segment in
                   `status` . Default: ' 🇻',•
+                • `diagnostics` : Boolean, `true` by default. If `false`, the
+                  default statusline component does not include LSP diagnostic
+                  counts.
 
                 Parameters: ~
                     {config}(required, table) Table of values; keys are as

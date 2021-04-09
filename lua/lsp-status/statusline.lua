@@ -38,7 +38,7 @@ end
 local function get_lsp_statusline(bufnr)
   bufnr = bufnr or 0
   if #vim.lsp.buf_get_clients(bufnr) == 0 then return '' end
-  local buf_diagnostics = (config.diagnostics) and diagnostics(bufnr) or nil
+  local buf_diagnostics = config.diagnostics and diagnostics(bufnr) or nil
   local buf_messages = messages()
   local only_hint = true
   local some_diagnostics = false

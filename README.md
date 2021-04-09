@@ -129,6 +129,8 @@ lsp_status.config {
     indicator_ok = 'Ok',
   })
 ```
+- `diagnostics`: Boolean, `true` by default. If `false`, the default statusline component does not
+  display LSP diagnostics.
 
 
 ## Example Use

@@ -15,7 +15,7 @@ local function make_statusline_component(diagnostics_key)
     bufh = bufh or vim.api.nvim_get_current_buf()
     local icon = icons[diagnostics_key] .. config.indicator_separator
     local _diagnostics = diagnostics(bufh)[diagnostics_key]
-    if #_diagnostics > 0 then return (icon or '') .. diagnostics(bufh)[diagnostics_key] end
+    if _diagnostics > 0 then return (icon or '') .. diagnostics(bufh)[diagnostics_key] end
   end
 end
 

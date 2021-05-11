@@ -81,7 +81,7 @@ local function get_lsp_statusline(bufnr)
       contents = msg.title
       if msg.message then contents = contents .. ' ' .. msg.message end
 
-      if msg.percentage then contents = contents .. ' (' .. msg.percentage .. ')' end
+      if msg.percentage then contents = contents .. ' (' .. string.format("%.0f%%", msg.percentage) .. ')' end
 
       if msg.spinner then
         contents = config.spinner_frames[(msg.spinner % #config.spinner_frames) + 1] .. ' ' ..

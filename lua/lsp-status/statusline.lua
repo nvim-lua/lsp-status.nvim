@@ -104,12 +104,13 @@ local function get_lsp_statusline(bufnr)
     table.insert(msgs, client_name .. ' ' .. contents)
   end
 
-  local base_status = vim.trim(table.concat(status_parts, ' ') .. ' ' .. table.concat(msgs, ' '))
+  local base_status = vim.trim(table.concat(status_parts, config.component_separator) .. ' ' ..
+                                 table.concat(msgs, config.component_separator))
   local symbol = config.status_symbol .. ((some_diagnostics and only_hint) and '' or ' ')
   if config.current_function then
     local current_function = vim.b.lsp_current_function
     if current_function and current_function ~= '' then
-      symbol = symbol .. '(' .. current_function .. ') '
+      symbol = symbol .. '(' .. current_function .. ')' .. config.component_separator
     end
   end
 

@@ -3,6 +3,7 @@ local default_config = {
   current_function = true,
   diagnostics = true,
   indicator_separator = ' ',
+  component_separator = ' ',
   indicator_errors = '',
   indicator_warnings = '',
   indicator_info = '🛈',

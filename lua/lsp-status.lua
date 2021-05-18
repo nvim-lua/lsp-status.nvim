@@ -177,6 +177,7 @@ local M = {
   status_warnings = statusline.warnings,
   status_info = statusline.info,
   status_hints = statusline.hints,
+  status_progress = statusline.progress,
   capabilities = messaging.capabilities
 }
 

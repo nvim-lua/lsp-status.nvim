@@ -35,11 +35,47 @@ local function init(_, _config)
   _info = make_statusline_component('info')
 end
 
+local function get_lsp_progress()
+  local buf_messages = messages()
+  local msgs = {}
+
+  for _, msg in ipairs(buf_messages) do
+    local name = aliases[msg.name] or msg.name
+    local client_name = '[' .. name .. ']'
+    local contents
+    if msg.progress then
+      contents = msg.title
+      if msg.message then contents = contents .. ' ' .. msg.message end
+
+      if msg.percentage then contents = contents .. string.format(" (%.0f%%)", msg.percentage) end
+
+      if msg.spinner then
+        contents = config.spinner_frames[(msg.spinner % #config.spinner_frames) + 1] .. ' ' ..
+          contents
+      end
+    elseif msg.status then
+      contents = msg.content
+      if msg.uri then
+        local filename = vim.uri_to_fname(msg.uri)
+        filename = vim.fn.fnamemodify(filename, ':~:.')
+        local space = math.min(60, math.floor(0.6 * vim.fn.winwidth(0)))
+        if #filename > space then filename = vim.fn.pathshorten(filename) end
+
+        contents = '(' .. filename .. ') ' .. contents
+      end
+    else
+      contents = msg.content
+    end
+
+    table.insert(msgs, client_name .. ' ' .. contents)
+  end
+  return table.concat(msgs, config.component_separator)
+end
+
 local function get_lsp_statusline(bufnr)
   bufnr = bufnr or 0
   if #vim.lsp.buf_get_clients(bufnr) == 0 then return '' end
   local buf_diagnostics = config.diagnostics and diagnostics(bufnr) or nil
-  local buf_messages = messages()
   local only_hint = true
   local some_diagnostics = false
   local status_parts = {}
@@ -72,40 +108,9 @@ local function get_lsp_statusline(bufnr)
     end
   end
 
-  local msgs = {}
-  for _, msg in ipairs(buf_messages) do
-    local name = aliases[msg.name] or msg.name
-    local client_name = '[' .. name .. ']'
-    local contents
-    if msg.progress then
-      contents = msg.title
-      if msg.message then contents = contents .. ' ' .. msg.message end
+  local msgs = get_lsp_progress()
 
-      if msg.percentage then contents = contents .. string.format(" (%.0f%%)", msg.percentage) end
-
-      if msg.spinner then
-        contents = config.spinner_frames[(msg.spinner % #config.spinner_frames) + 1] .. ' ' ..
-                     contents
-      end
-    elseif msg.status then
-      contents = msg.content
-      if msg.uri then
-        local filename = vim.uri_to_fname(msg.uri)
-        filename = vim.fn.fnamemodify(filename, ':~:.')
-        local space = math.min(60, math.floor(0.6 * vim.fn.winwidth(0)))
-        if #filename > space then filename = vim.fn.pathshorten(filename) end
-
-        contents = '(' .. filename .. ') ' .. contents
-      end
-    else
-      contents = msg.content
-    end
-
-    table.insert(msgs, client_name .. ' ' .. contents)
-  end
-
-  local base_status = vim.trim(table.concat(status_parts, config.component_separator) .. ' ' ..
-                                 table.concat(msgs, config.component_separator))
+  local base_status = vim.trim(table.concat(status_parts, config.component_separator) .. ' ' .. msgs)
   local symbol = config.status_symbol .. ((some_diagnostics and only_hint) and '' or ' ')
   if config.current_function then
     local current_function = vim.b.lsp_current_function
@@ -126,7 +131,8 @@ end
 local M = {
   _init = init,
   status = get_lsp_statusline,
-  _get_component_functions = get_component_functions
+  progress = get_lsp_progress,
+  _get_component_functions = get_component_functions,
 }
 
 return M

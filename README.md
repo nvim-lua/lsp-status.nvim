@@ -130,6 +130,10 @@ lsp_status.config {
     indicator_ok = 'Ok',
   })
 ```
+- `indicator_separator`: a string which goes between each diagnostic group symbol and its count.
+  Defaults to whitespace.
+- `component_separator`: a string which goes between each "chunk" of the statusline component (i.e.
+  different diagnostic groups, messages). Defaults to whitespace.
 - `diagnostics`: Boolean, `true` by default. If `false`, the default statusline component does not
   display LSP diagnostics.
 

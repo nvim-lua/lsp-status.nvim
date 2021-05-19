@@ -47,7 +47,9 @@ local function get_lsp_progress()
       contents = msg.title
       if msg.message then contents = contents .. ' ' .. msg.message end
 
-      if msg.percentage then contents = contents .. string.format(" (%.0f%%)", msg.percentage) end
+      -- this percentage format string escapes a percent sign once to show a percentage and one more
+      -- time to prevent errors in vim statusline's because of it's treatment of % chars
+      if msg.percentage then contents = contents .. string.format(" (%.0f%%%%)", msg.percentage) end
 
       if msg.spinner then
         contents = config.spinner_frames[(msg.spinner % #config.spinner_frames) + 1] .. ' ' ..

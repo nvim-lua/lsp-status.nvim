@@ -119,6 +119,7 @@ lsp_status.config {
 ```
 - `current_function`: Boolean, `true` if the current function should be updated and displayed in the
   default statusline component.
+- `show_filename`: Boolean, `true` if the filename should be displayed in the progress text.
 - `indicator_*`-group: strings to show as diagnostic warnings. If you don't have Nerd/Awesome Fonts you can replace defaults with ASCII chars like this:
 ```
 -- Put this somewhere near lsp_status.register_progress()

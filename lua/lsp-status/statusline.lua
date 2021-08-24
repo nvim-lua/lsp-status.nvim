@@ -57,7 +57,7 @@ local function get_lsp_progress()
       end
     elseif msg.status then
       contents = msg.content
-      if msg.uri then
+      if config.show_filename and msg.uri then
         local filename = vim.uri_to_fname(msg.uri)
         filename = vim.fn.fnamemodify(filename, ':~:.')
         local space = math.min(60, math.floor(0.6 * vim.fn.winwidth(0)))

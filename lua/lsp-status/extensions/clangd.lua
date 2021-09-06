@@ -10,11 +10,13 @@ local function init(_messages, _) messages = _messages end
 local function ensure_init(id) util.ensure_init(messages, id, 'clangd') end
 
 local handlers = {
-  ['textDocument/clangd.fileStatus'] = function(_, _, statusMessage, client_id)
+  ['textDocument/clangd.fileStatus'] = util.mk_handler(function(_, statusMessage, ctx)
+    local client_id = ctx.client_id
+
     ensure_init(client_id)
     messages[client_id].status = {uri = statusMessage.uri, content = statusMessage.state}
     redraw.redraw()
-  end
+  end)
 }
 
 --- Return the handler {LSP Method: handler} table for `clangd`'s `fileStatus` extension

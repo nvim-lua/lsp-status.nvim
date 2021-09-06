@@ -11,7 +11,9 @@ local function unregister_client(id)
   clients[id] = nil
 end
 
-local function progress_callback(_, _, msg, client_id)
+local function progress_callback(_, msg, ctx)
+  local client_id = ctx.client_id
+
   util.ensure_init(messages, client_id, client_id)
   local val = msg.value
   if val.kind then
@@ -94,7 +96,9 @@ local function get_messages()
   return new_messages
 end
 
-local function register_progress() vim.lsp.handlers['$/progress'] = progress_callback end
+local function register_progress()
+  vim.lsp.handlers['$/progress'] = util.mk_handler(progress_callback)
+end
 
 -- Client registration for messages
 local function register_client(id, name)

@@ -22,7 +22,7 @@ local scope_kinds = {
 }
 
 -- Find current function context
-local function current_function_callback(_, _, result, _, _)
+local function current_function_callback(_, result)
   vim.b.lsp_current_function = ''
   if type(result) ~= 'table' then
     return
@@ -59,7 +59,7 @@ end
 
 local function update_current_function()
   local params = { textDocument = lsp_util.make_text_document_params() }
-  vim.lsp.buf_request(0, 'textDocument/documentSymbol', params, current_function_callback)
+  vim.lsp.buf_request(0, 'textDocument/documentSymbol', params, util.mk_handler(current_function_callback))
 end
 
 local M = {

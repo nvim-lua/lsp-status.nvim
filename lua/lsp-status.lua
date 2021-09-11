@@ -1,6 +1,7 @@
 local default_config = {
   kind_labels = {},
   current_function = true,
+  show_filename = true,
   diagnostics = true,
   indicator_separator = ' ',
   component_separator = ' ',

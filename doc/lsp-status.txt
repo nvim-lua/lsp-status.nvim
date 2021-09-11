@@ -105,6 +105,8 @@ config({config})                                   *lsp-status.config()*
                   should be updated and displayed in the default statusline
                   component. Shows the current function, method, class,
                   struct, interface, enum, module, or namespace.
+                • `show_filename`: Boolean, `true` if the filename should be
+                  displayed in the progress text.
                 • `indicator_separator`: a string which goes between each
                   diagnostic group symbol and its count. Defaults to whitespace.
                 • `component_separator`: a string which goes between each

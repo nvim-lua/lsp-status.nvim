@@ -40,8 +40,6 @@ local function get_lsp_progress()
   local msgs = {}
 
   for _, msg in ipairs(buf_messages) do
-    local name = aliases[msg.name] or msg.name
-    local client_name = '[' .. name .. ']'
     local contents
     if msg.progress then
       contents = msg.title
@@ -69,7 +67,8 @@ local function get_lsp_progress()
       contents = msg.content
     end
 
-    table.insert(msgs, client_name .. ' ' .. contents)
+    local name = aliases[msg.name] or msg.name
+    table.insert(msgs, config.format(name, contents))
   end
   return table.concat(msgs, config.component_separator)
 end

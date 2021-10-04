@@ -127,6 +127,13 @@ config({config})                                   *lsp-status.config()*
                   },
                 • `status_symbol` : Symbol to start the statusline segment in
                   `status` . Default: ' 🇻',
+                • `status_format` : Function, defining the format of `status` . 
+                  Default:
+                  lua << END
+                  function(name, contents)
+                    return string.format("[%s] %s", name, contents)
+                  end
+                  END,
                 • `diagnostics` : Boolean, `true` by default. If `false`, the
                   default statusline component does not include LSP diagnostic
                   counts.

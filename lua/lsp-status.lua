@@ -12,6 +12,9 @@ local default_config = {
   indicator_ok = '',
   spinner_frames = {'⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷'},
   status_symbol = ' 🇻',
+  status_format = function(name, contents)
+    return string.format("[%s] %s", name, contents)
+  end,
   select_symbol = nil,
   update_interval = 100
 }

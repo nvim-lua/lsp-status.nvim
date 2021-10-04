@@ -68,7 +68,7 @@ local function get_lsp_progress()
     end
 
     local name = aliases[msg.name] or msg.name
-    table.insert(msgs, config.format(name, contents))
+    table.insert(msgs, config.status_format(name, contents))
   end
   return table.concat(msgs, config.component_separator)
 end

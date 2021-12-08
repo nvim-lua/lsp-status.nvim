@@ -83,7 +83,7 @@ local function on_attach(client)
   messaging.register_client(client.id, client.name)
   vim.api.nvim_command('augroup lsp_aucmds')
   vim.api.nvim_command('au! * <buffer>')
-  vim.api.nvim_command('au User LspDiagnosticsChanged lua require("lsp-status/redraw").redraw()')
+  vim.api.nvim_command('au User DiagnosticChanged lua require("lsp-status/redraw").redraw()')
 
   -- If the client is a documentSymbolProvider, set up an autocommand
   -- to update the containing symbol

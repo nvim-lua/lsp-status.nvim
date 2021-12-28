@@ -25,10 +25,18 @@ local function progress_callback(_, msg, ctx)
         spinner = 1
       }
     elseif val.kind == 'report' then
-      messages[client_id].progress[msg.token].message = val.message
-      messages[client_id].progress[msg.token].percentage = val.percentage
-      messages[client_id].progress[msg.token].spinner =
-        messages[client_id].progress[msg.token].spinner + 1
+      if messages[client_id].progress[msg.token] == nil then
+        vim.api.nvim_command('echohl WarningMsg')
+        vim.api.nvim_command(
+          'echom "[lsp-status] Received `report` message with no corresponding `begin` from  ' ..
+            clients[client_id] .. '!"')
+        vim.api.nvim_command('echohl None')
+      else
+        messages[client_id].progress[msg.token].message = val.message
+        messages[client_id].progress[msg.token].percentage = val.percentage
+        messages[client_id].progress[msg.token].spinner =
+          messages[client_id].progress[msg.token].spinner + 1
+      end
     elseif val.kind == 'end' then
       if messages[client_id].progress[msg.token] == nil then
         vim.api.nvim_command('echohl WarningMsg')

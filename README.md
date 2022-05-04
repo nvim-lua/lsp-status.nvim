@@ -3,6 +3,9 @@
 This is a Neovim plugin/library for generating statusline components from the built-in LSP client.
 
 ## Notices
+- **2022/05/05**: **Breaking change**. `progress()` no longer escapes `%` in the returned string. If
+  you were using `progress()` or `status()` in your `statusline` option, you should wrap the
+  expression inside `%{}` to escape `%`. See [below](#all-together-now) for an example.
 - **2021/03/13**: Some users report success using the Google "Noto Emoji" font for `status_symbol`
   and `indicator_hint`.
 - **2020/11/19**: Please note that the default diagnostics symbols require Font Awesome or a [Nerd
@@ -236,6 +239,12 @@ function! LspStatus() abort
   return ''
 endfunction
 
+" Manually set 'statusline'
+set statusline+=%{LspStatus()}
+
+" ... or use a statusline plugin, e.g. lightline:
+let g:lightline.active.right = [..., ['lsp_status']]
+let g:lightline.component_function = {'lsp_status': 'LspStatus'}
 ```
 
 ## Status

@@ -87,7 +87,7 @@ local function on_attach(client)
 
   -- If the client is a documentSymbolProvider, set up an autocommand
   -- to update the containing symbol
-  if _config.current_function and client.resolved_capabilities.document_symbol then
+  if _config.current_function and client.server_capabilities.documentSymbolProvider then
     vim.api.nvim_command(
       'au CursorHold <buffer> lua require("lsp-status").update_current_function()')
   end

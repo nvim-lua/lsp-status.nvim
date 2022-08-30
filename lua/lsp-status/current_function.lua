@@ -57,9 +57,25 @@ local function current_function_callback(_, result)
   end
 end
 
+local function first_capable_client(bufnr, capability)
+  local clients = vim.lsp.buf_get_clients(bufnr)
+  for _, client in pairs(clients) do
+    if client.resolved_capabilities[capability] then
+      return client
+    end
+  end
+end
+
 local function update_current_function()
-  local params = { textDocument = lsp_util.make_text_document_params() }
-  vim.lsp.buf_request(0, 'textDocument/documentSymbol', params, util.mk_handler(current_function_callback))
+  local client = first_capable_client(0, "document_symbol")
+  if client then
+    local params = { textDocument = lsp_util.make_text_document_params() }
+    client.request('textDocument/documentSymbol', params, util.mk_handler(current_function_callback), 0)
+  else
+    -- clear current function so we don't show stale information
+    vim.b.lsp_current_function = ''
+    redraw.redraw()
+  end
 end
 
 local M = {
